@@ -12,6 +12,7 @@ import Down
 final class ViewController: NSViewController {
 
     @IBOutlet var textView: NSTextView!
+    @IBOutlet weak var textViewRight: NSTextView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -45,8 +46,16 @@ private extension ViewController {
         
         do {
             let down = Down(markdownString: readMeContents)
-            let attri = try down.toAttributedString(styler: MTStyler(values: StyleValues(), listPrefixAttributes: [:]))
-            textView.textStorage?.append(attri)
+//            textViewRight.textStorage?.append(NSAttributedString(string: readMeContents))
+//            textViewRight.textStorage?.append(try down.toAttributedString())
+          
+            
+            let string = try down.toAttributedString(styler: MTStyler(values: StyleValues(), listPrefixAttributes: [:]))
+//            let string = NSAttributedString(string: try down.toCommonMark())
+            
+            textView.textStorage?.append(string)
+            
+            
         } catch {
             NSApp.presentError(error)
         }
@@ -230,10 +239,6 @@ struct MTStyler: Styler {
             .paragraphStyle: parStyle,
             .font: font,
             ])
-//        str.insert(NSAttributedString.init(string: "# ", attributes: [
-//            .paragraphStyle: parStyle,
-//            .font: font,
-//            ]), at: 0)
     }
     
     func style(thematicBreak str: NSMutableAttributedString) {
