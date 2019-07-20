@@ -37,7 +37,7 @@ static bool S_last_line_blank(const cmark_node *node) {
 static bool S_last_line_checked(const cmark_node *node) {
   return (node->flags & CMARK_NODE__LAST_LINE_CHECKED) != 0;
 }
-
+/** 获取节点的类型 */
 static CMARK_INLINE cmark_node_type S_type(const cmark_node *node) {
   return (cmark_node_type)node->type;
 }
@@ -52,7 +52,7 @@ static void S_set_last_line_blank(cmark_node *node, bool is_blank) {
 static void S_set_last_line_checked(cmark_node *node) {
   node->flags |= CMARK_NODE__LAST_LINE_CHECKED;
 }
-
+/** 参数"c" 是行结尾字符 */
 static CMARK_INLINE bool S_is_line_end_char(char c) {
   return (c == '\n' || c == '\r');
 }
@@ -115,7 +115,7 @@ cmark_parser *cmark_parser_new_with_mem(int options, cmark_mem *mem) {
 
   return parser;
 }
-
+/** 使用 option 生成一个解析器 */
 cmark_parser *cmark_parser_new(int options) {
   extern cmark_mem DEFAULT_MEM_ALLOCATOR;
   return cmark_parser_new_with_mem(options, &DEFAULT_MEM_ALLOCATOR);
@@ -357,7 +357,7 @@ static cmark_node *finalize(cmark_parser *parser, cmark_node *b) {
   return parent;
 }
 
-// Add a node as child of another.  Return pointer to child.
+/// Add a node as child of another.  Return pointer to child.
 static cmark_node *add_child(cmark_parser *parser, cmark_node *parent,
                              cmark_node_type block_type, int start_column) {
   assert(parent);
@@ -571,7 +571,7 @@ static void S_parser_feed(cmark_parser *parser, const unsigned char *buffer,
     if (eol >= end && eof) {
       process = true;
     }
-
+    
     chunk_len = (eol - buffer);
     if (process) {
       if (parser->linebuf.size > 0) {
@@ -662,9 +662,9 @@ static int S_scan_thematic_break(cmark_parser *parser, cmark_chunk *input,
   }
 }
 
-// Find first nonspace character from current offset, setting
-// parser->first_nonspace, parser->first_nonspace_column,
-// parser->indent, and parser->blank. Does not advance parser->offset.
+/** Find first nonspace character from current offset, setting
+ parser->first_nonspace, parser->first_nonspace_column,
+ parser->indent, and parser->blank. Does not advance parser->offset. */
 static void S_find_first_nonspace(cmark_parser *parser, cmark_chunk *input) {
   char c;
   int chars_to_tab = TAB_STOP - (parser->column % TAB_STOP);
@@ -694,15 +694,15 @@ static void S_find_first_nonspace(cmark_parser *parser, cmark_chunk *input) {
   parser->blank = S_is_line_end_char(peek_at(input, parser->first_nonspace));
 }
 
-// Advance parser->offset and parser->column.  parser->offset is the
-// byte position in input; parser->column is a virtual column number
-// that takes into account tabs. (Multibyte characters are not taken
-// into account, because the Markdown line prefixes we are interested in
-// analyzing are entirely ASCII.)  The count parameter indicates
-// how far to advance the offset.  If columns is true, then count
-// indicates a number of columns; otherwise, a number of bytes.
-// If advancing a certain number of columns partially consumes
-// a tab character, parser->partially_consumed_tab is set to true.
+/** Advance parser->offset and parser->column.
+ parser->offset is the byte position in input;
+ parser->column is a virtual column number that takes into account tabs. (Multibyte characters are not taken into account, because the Markdown line prefixes we are interested in analyzing are entirely ASCII.)
+ 
+ @param count The count parameter indicates how far to advance the offset.
+ @param columns If columns is true, then count indicates a number of columns; otherwise, a number of bytes.
+ 
+ If advancing a certain number of columns partially consumes a tab character, parser->partially_consumed_tab is set to true.
+ */
 static void S_advance_offset(cmark_parser *parser, cmark_chunk *input,
                              bufsize_t count, bool columns) {
   char c;
@@ -1203,7 +1203,7 @@ static void add_text_to_container(cmark_parser *parser, cmark_node *container,
   }
 }
 
-/* See http://spec.commonmark.org/0.24/#phase-1-block-structure */
+/** See http://spec.commonmark.org/0.24/#phase-1-block-structure */
 static void S_process_line(cmark_parser *parser, const unsigned char *buffer,
                            bufsize_t bytes) {
   cmark_node *last_matched_container;

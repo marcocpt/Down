@@ -18,7 +18,7 @@ typedef int32_t bufsize_t;
 typedef struct {
   cmark_mem *mem;
   unsigned char *ptr;
-  bufsize_t asize, size;
+  bufsize_t asize, size;        /**< asize: 全部的空间，初始 256，size: 使用的尺寸。*/
 } cmark_strbuf;
 
 extern unsigned char cmark_strbuf__initbuf[];

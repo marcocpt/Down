@@ -68,7 +68,7 @@ struct cmark_node {
   int end_line;
   int end_column;
   int internal_offset;
-  uint16_t type;
+  uint16_t type;                    /**< 节点的类型 */
   uint16_t flags;
 
   union {
