@@ -1,5 +1,5 @@
-#ifndef CMARK_AST_H
-#define CMARK_AST_H
+#ifndef CMARK_PARSER_H
+#define CMARK_PARSER_H
 
 #include <stdio.h>
 #include "references.h"
@@ -14,23 +14,41 @@ extern "C" {
 
 struct cmark_parser {
   struct cmark_mem *mem;
-  struct cmark_reference_map *refmap;
+  /* A hashtable of urls in the current document for cross-references */
+  struct cmark_map *refmap;
+  /* The root node of the parser, always a CMARK_NODE_DOCUMENT */
   struct cmark_node *root;
+  /* The last open block after a line is fully processed */
   struct cmark_node *current;
-  int line_number;                      /**< 总行数 */
-  bufsize_t offset;                     /**< byte position in input */
-  bufsize_t column;                     /**< a virtual column numberthat takes into account tabs. (Multibyte characters are not takeninto account, because the Markdown line prefixes we are interested inanalyzing are entirely ASCII.) */
-  bufsize_t first_nonspace;             /**< 第一个非j空格字符位 */
+  /* See the documentation for cmark_parser_get_line_number() in cmark.h */
+  int line_number;
+  /* See the documentation for cmark_parser_get_offset() in cmark.h */
+  bufsize_t offset;
+  /* See the documentation for cmark_parser_get_column() in cmark.h */
+  bufsize_t column;
+  /* See the documentation for cmark_parser_get_first_nonspace() in cmark.h */
+  bufsize_t first_nonspace;
+  /* See the documentation for cmark_parser_get_first_nonspace_column() in cmark.h */
   bufsize_t first_nonspace_column;
   bufsize_t thematic_break_kill_pos;
+  /* See the documentation for cmark_parser_get_indent() in cmark.h */
   int indent;
-  bool blank;                           /**< 是否为空行 */
+  /* See the documentation for cmark_parser_is_blank() in cmark.h */
+  bool blank;
+  /* See the documentation for cmark_parser_has_partially_consumed_tab() in cmark.h */
   bool partially_consumed_tab;
-  cmark_strbuf curline;                 /**< 当前在解析的行 */
+  /* Contains the currently processed line */
+  cmark_strbuf curline;
+  /* See the documentation for cmark_parser_get_last_line_length() in cmark.h */
   bufsize_t last_line_length;
+  /* FIXME: not sure about the difference with curline */
   cmark_strbuf linebuf;
+  /* Options set by the user, see the Options section in cmark.h */
   int options;
-  bool last_buffer_ended_with_cr;       /**< buffer 以 'cr' 结尾 */
+  bool last_buffer_ended_with_cr;
+  cmark_llist *syntax_extensions;
+  cmark_llist *inline_syntax_extensions;
+  cmark_ispunct_func backslash_ispunct;
 };
 
 #ifdef __cplusplus
