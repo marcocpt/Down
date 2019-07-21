@@ -724,7 +724,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="223" height="270"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" red="0.97439967806246008" green="1" blue="0.89982085880642693" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <size key="minSize" width="223" height="270"/>
                                                     <size key="maxSize" width="480" height="10000000"/>
                                                     <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -751,7 +751,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="217" height="270"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" red="0.89005088806152344" green="0.91176491975784302" blue="0.82036608457565308" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <size key="minSize" width="217" height="270"/>
                                                     <size key="maxSize" width="480" height="10000000"/>
                                                     <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
