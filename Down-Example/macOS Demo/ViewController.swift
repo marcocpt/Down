@@ -46,16 +46,15 @@ private extension ViewController {
         
         do {
             let down = Down(markdownString: readMeContents)
-//            textViewRight.textStorage?.append(NSAttributedString(string: readMeContents))
-//            textViewRight.textStorage?.append(try down.toAttributedString())
-          
-            
-            let string = try down.toAttributedString(styler: MTStyler(values: StyleValues(), listPrefixAttributes: [:]))
-//            let string = NSAttributedString(string: try down.toCommonMark())
-            
+            let ast = try down.toAST(DownOptions.sourcePos)
+            let result = Document(cmarkNode:ast).accept(DebugVisitor())
+            print(result)
+//            let string = try down.toAttributedString(styler: MTStyler(values: StyleValues(), listPrefixAttributes: [:]))
+            let string = NSAttributedString(string: try down.toCommonMark(DownOptions.sourcePos))
             textView.textStorage?.append(string)
-            
-            
+                        
+            textViewRight.textStorage?.append(NSAttributedString(string: readMeContents))
+            //            textViewRight.textStorage?.append(try down.toAttributedString())
         } catch {
             NSApp.presentError(error)
         }

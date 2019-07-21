@@ -31,7 +31,7 @@ public class BaseNode: Node {
         return result
     }()
     
-    init(cmarkNode: CMarkNode) {
+    public init(cmarkNode: CMarkNode) {
         self.cmarkNode = cmarkNode
     }
     
