@@ -74,6 +74,7 @@
 		85446F2022E4530700492773 /* core-extensions.c in Sources */ = {isa = PBXBuildFile; fileRef = 85446F1022E4530600492773 /* core-extensions.c */; };
 		85446F2222E455B900492773 /* cmark-gfm-extensions_export.h in Headers */ = {isa = PBXBuildFile; fileRef = 85446F2122E455B900492773 /* cmark-gfm-extensions_export.h */; };
 		854642D322E5946A002C166E /* Strikethrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854642D222E5946A002C166E /* Strikethrough.swift */; };
+		854642D522E5C71B002C166E /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854642D422E5C71B002C166E /* Table.swift */; };
 		8548B46D22E501BA002F7BD9 /* libcmark.h in Headers */ = {isa = PBXBuildFile; fileRef = 8548B46C22E501BA002F7BD9 /* libcmark.h */; };
 		8A569F481E6B3ED2008BE2AC /* DownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43AE5D91CFFD0D0006E1522 /* DownView.swift */; };
 		8A569F6E1E6B3EDE008BE2AC /* DownASTRenderable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D486E9951CFDD4860059FD7C /* DownASTRenderable.swift */; };
@@ -252,6 +253,7 @@
 		85446F1022E4530600492773 /* core-extensions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "core-extensions.c"; sourceTree = "<group>"; };
 		85446F2122E455B900492773 /* cmark-gfm-extensions_export.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "cmark-gfm-extensions_export.h"; sourceTree = "<group>"; };
 		854642D222E5946A002C166E /* Strikethrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strikethrough.swift; sourceTree = "<group>"; };
+		854642D422E5C71B002C166E /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
 		8548B46C22E501BA002F7BD9 /* libcmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libcmark.h; sourceTree = "<group>"; };
 		8A569F401E6B3E50008BE2AC /* Down.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Down.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AFAEAFB1E6E32E900E09B68 /* DownTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DownTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -569,6 +571,7 @@
 				EEEBEE5A225D2A7E00AE438D /* Text.swift */,
 				EEEBEE58225D2A7000AE438D /* ThematicBreak.swift */,
 				854642D222E5946A002C166E /* Strikethrough.swift */,
+				854642D422E5C71B002C166E /* Table.swift */,
 			);
 			path = Nodes;
 			sourceTree = "<group>";
@@ -823,6 +826,7 @@
 				85446ECE22E4004600492773 /* plugin.c in Sources */,
 				85446ED622E4004600492773 /* syntax_extension.c in Sources */,
 				EEEBEE5B225D2A7E00AE438D /* Text.swift in Sources */,
+				854642D522E5C71B002C166E /* Table.swift in Sources */,
 				85446ECB22E4004600492773 /* html.c in Sources */,
 				85446ED522E4004600492773 /* linked_list.c in Sources */,
 				EEEBEE4F225D2A1400AE438D /* CodeBlock.swift in Sources */,

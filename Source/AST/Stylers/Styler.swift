@@ -40,4 +40,7 @@ public protocol Styler {
     
     // extensions
     func style(strikethrough str: NSMutableAttributedString)
+    func style(table str: NSMutableAttributedString)
+    func style(tableCell str: NSMutableAttributedString)
+    func style(tableRow str: NSMutableAttributedString)
 }

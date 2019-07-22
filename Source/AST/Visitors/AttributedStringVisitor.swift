@@ -169,9 +169,28 @@ extension AttributedStringVisitor: Visitor {
         return s
     }
     
+    // extensions
     public func visit(strikethrough node: Strikethrough) -> NSMutableAttributedString {
         let s = visitChildren(of: node).joined
         styler.style(strikethrough: s)
+        return s
+    }
+    
+    public func visit(table node: Table) -> NSMutableAttributedString {
+        let s = visitChildren(of: node).joined
+        styler.style(table: s)
+        return s
+    }
+    
+    public func visit(tableCell node: TableCell) -> NSMutableAttributedString {
+        let s = visitChildren(of: node).joined
+        styler.style(tableCell: s)
+        return s
+    }
+    
+    public func visit(tableRow node: TableRow) -> NSMutableAttributedString {
+        let s = visitChildren(of: node).joined
+        styler.style(tableRow: s)
         return s
     }
 }

@@ -45,13 +45,13 @@ private extension ViewController {
         let readMeContents = try! String(contentsOf: readMeURL)
         
         do {
-          let extensions = [MarkdownExtension.strikethrough]
+          let extensions = [MarkdownExtension.strikethrough, .table]
           let down = Down(markdownString: readMeContents)
           let ast = try down.toAST(DownOptions.sourcePos, extensions: extensions)
           let result = Document(cmarkNode:ast).accept(DebugVisitor())
           print(result)
           let string = try down.toAttributedString(styler: MTStyler(values: StyleValues(), listPrefixAttributes: [:]), extensions: extensions)
-//            let string = NSAttributedString(string: try down.toCommonMark(DownOptions.sourcePos))
+//          let string = NSAttributedString(string: try down.toCommonMark(DownOptions.sourcePos))
 //          let string = try down.toAttributedString(extensions: extensions)
             textView.textStorage?.append(string)
                         
@@ -86,6 +86,9 @@ private class EmptyStyler: Styler {
     func style(link str: NSMutableAttributedString, title: String?, url: String?) {}
     func style(image str: NSMutableAttributedString, title: String?, url: String?) {}
     func style(strikethrough str: NSMutableAttributedString) {}
+    func style(table str: NSMutableAttributedString) { }
+    func style(tableCell str: NSMutableAttributedString) { }
+    func style(tableRow str: NSMutableAttributedString) { }
 }
 
 struct StyleValues {
@@ -321,5 +324,17 @@ struct MTStyler: Styler {
     //extensions
     func style(strikethrough str: NSMutableAttributedString) {
         str.addAttributes([.strikethroughStyle: 1, .strikethroughColor: NSColor.red])
+    }
+    
+    func style(table str: NSMutableAttributedString) {
+        print(str)
+    }
+    
+    func style(tableCell str: NSMutableAttributedString) {
+        print(str)
+    }
+    
+    func style(tableRow str: NSMutableAttributedString) {
+        print(str)
     }
 }
