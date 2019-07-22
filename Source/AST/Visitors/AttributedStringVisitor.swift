@@ -168,6 +168,12 @@ extension AttributedStringVisitor: Visitor {
         styler.style(image: s, title: node.title, url: node.url)
         return s
     }
+    
+    public func visit(strikethrough node: Strikethrough) -> NSMutableAttributedString {
+        let s = visitChildren(of: node).joined
+        styler.style(strikethrough: s)
+        return s
+    }
 }
 
 // MARK: - Helper extentions

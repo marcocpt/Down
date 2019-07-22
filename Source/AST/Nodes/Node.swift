@@ -54,6 +54,10 @@ public extension UnsafeMutablePointer where Pointee == cmark_node {
         case CMARK_NODE_STRONG:         return Strong(cmarkNode: self)
         case CMARK_NODE_LINK:           return Link(cmarkNode: self)
         case CMARK_NODE_IMAGE:          return Image(cmarkNode: self)
+        
+        /// extensions
+        case CMARK_NODE_STRIKETHROUGH:  return Strikethrough(cmarkNode: self)
+            
         default:                        return nil
         }
     }
@@ -99,3 +103,8 @@ private extension String {
         self = result
     }
 }
+
+public enum MarkdownExtension: String, CaseIterable {
+    case table, strikethrough, autolink, tagfilter, tasklist
+}
+

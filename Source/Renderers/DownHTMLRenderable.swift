@@ -10,7 +10,7 @@ import Foundation
 import libcmark
 
 public protocol DownHTMLRenderable: DownRenderable {
-    func toHTML(_ options: DownOptions) throws -> String
+    func toHTML(_ options: DownOptions, extensions: [MarkdownExtension]) throws -> String
 }
 
 extension DownHTMLRenderable {
@@ -19,8 +19,8 @@ extension DownHTMLRenderable {
     /// - Parameter options: `DownOptions` to modify parsing or rendering, defaulting to `.default`
     /// - Returns: HTML string
     /// - Throws: `DownErrors` depending on the scenario
-    public func toHTML(_ options: DownOptions = .default) throws -> String {
-        return try markdownString.toHTML(options)
+    public func toHTML(_ options: DownOptions = .default, extensions: [MarkdownExtension] = []) throws -> String {
+        return try markdownString.toHTML(options, extensions: extensions)
     }
 }
 
@@ -35,7 +35,7 @@ public struct DownHTMLRenderer {
     /// - Returns: HTML string
     /// - Throws: `ASTRenderingError` if the AST could not be converted
     public static func astToHTML(_ ast: UnsafeMutablePointer<cmark_node>, options: DownOptions = .default) throws -> String {
-        guard let cHTMLString = cmark_render_html(ast, options.rawValue) else {
+        guard let cHTMLString = cmark_render_html(ast, options.rawValue, nil) else {
             throw DownErrors.astRenderingError
         }
         defer { free(cHTMLString) }

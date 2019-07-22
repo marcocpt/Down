@@ -16,8 +16,8 @@ extension String {
     /// - Parameter options: `DownOptions` to modify parsing or rendering, defaulting to `.default`
     /// - Returns: HTML string
     /// - Throws: `DownErrors` depending on the scenario
-    public func toHTML(_ options: DownOptions = .default) throws -> String {
-        let ast = try DownASTRenderer.stringToAST(self, options: options)
+    public func toHTML(_ options: DownOptions = .default, extensions: [MarkdownExtension] = []) throws -> String {
+        let ast = try DownASTRenderer.stringToAST(self, options: options, extensions: extensions)
         let html = try DownHTMLRenderer.astToHTML(ast, options: options)
         cmark_node_free(ast)
         return html

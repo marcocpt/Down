@@ -37,4 +37,7 @@ public protocol Styler {
     func style(image str: NSMutableAttributedString, title: String?, url: String?)
     
     var listPrefixAttributes: [NSAttributedString.Key: Any] { get }
+    
+    // extensions
+    func style(strikethrough str: NSMutableAttributedString)
 }

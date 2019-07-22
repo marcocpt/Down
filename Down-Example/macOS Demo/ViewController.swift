@@ -45,12 +45,14 @@ private extension ViewController {
         let readMeContents = try! String(contentsOf: readMeURL)
         
         do {
-            let down = Down(markdownString: readMeContents)
-            let ast = try down.toAST(DownOptions.sourcePos)
-            let result = Document(cmarkNode:ast).accept(DebugVisitor())
-            print(result)
-//            let string = try down.toAttributedString(styler: MTStyler(values: StyleValues(), listPrefixAttributes: [:]))
-            let string = NSAttributedString(string: try down.toCommonMark(DownOptions.sourcePos))
+          let extensions = [MarkdownExtension.strikethrough]
+          let down = Down(markdownString: readMeContents)
+          let ast = try down.toAST(DownOptions.sourcePos, extensions: extensions)
+          let result = Document(cmarkNode:ast).accept(DebugVisitor())
+          print(result)
+          let string = try down.toAttributedString(styler: MTStyler(values: StyleValues(), listPrefixAttributes: [:]), extensions: extensions)
+//            let string = NSAttributedString(string: try down.toCommonMark(DownOptions.sourcePos))
+//          let string = try down.toAttributedString(extensions: extensions)
             textView.textStorage?.append(string)
                         
             textViewRight.textStorage?.append(NSAttributedString(string: readMeContents))
@@ -83,6 +85,7 @@ private class EmptyStyler: Styler {
     func style(strong str: NSMutableAttributedString) {}
     func style(link str: NSMutableAttributedString, title: String?, url: String?) {}
     func style(image str: NSMutableAttributedString, title: String?, url: String?) {}
+    func style(strikethrough str: NSMutableAttributedString) {}
 }
 
 struct StyleValues {
@@ -313,5 +316,10 @@ struct MTStyler: Styler {
         if let url = url {
             str.addAttributes([.link: url])
         }
+    }
+  
+    //extensions
+    func style(strikethrough str: NSMutableAttributedString) {
+        str.addAttributes([.strikethroughStyle: 1, .strikethroughColor: NSColor.red])
     }
 }

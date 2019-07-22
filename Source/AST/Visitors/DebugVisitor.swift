@@ -118,4 +118,8 @@ extension DebugVisitor: Visitor {
     public func visit(image node: Image) -> String {
         return reportWithChildren(node)
     }
+    
+    public func visit(strikethrough node: Strikethrough) -> String {
+        return reportWithChildren(node)
+    }
 }

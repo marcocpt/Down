@@ -10,8 +10,8 @@ import Foundation
 import libcmark
 
 public protocol DownAttributedStringRenderable: DownHTMLRenderable, DownASTRenderable {
-    func toAttributedString(_ options: DownOptions, stylesheet: String?) throws -> NSAttributedString
-    func toAttributedString(_ options: DownOptions, styler: Styler) throws -> NSAttributedString
+    func toAttributedString(_ options: DownOptions, stylesheet: String?, extensions: [MarkdownExtension]) throws -> NSAttributedString
+    func toAttributedString(_ options: DownOptions, styler: Styler, extensions: [MarkdownExtension]) throws -> NSAttributedString
 }
 
 extension DownAttributedStringRenderable {
@@ -27,8 +27,8 @@ extension DownAttributedStringRenderable {
     ///   - stylesheet: a `String` to use as the CSS stylesheet when rendering, defaulting to a style that uses the `NSAttributedString` default font
     /// - Returns: An `NSAttributedString`
     /// - Throws: `DownErrors` depending on the scenario
-    public func toAttributedString(_ options: DownOptions = .default, stylesheet: String? = nil) throws -> NSAttributedString {
-        let html = try self.toHTML(options)
+    public func toAttributedString(_ options: DownOptions = .default, stylesheet: String? = nil, extensions: [MarkdownExtension] = []) throws -> NSAttributedString {
+        let html = try self.toHTML(options, extensions: extensions)
         let defaultStylesheet = "* {font-family: Helvetica } code, pre { font-family: Menlo }"
         return try NSAttributedString(htmlString: "<style>" + (stylesheet ?? defaultStylesheet) + "</style>" + html)
     }
@@ -44,8 +44,8 @@ extension DownAttributedStringRenderable {
     ///   - styler: a class/struct conforming to `Styler` to use when rendering the various elements of the attributed string
     /// - Returns: `DownErrors` depending on the scenario
     /// - Throws: `DownErrors` depending on the scenario
-    public func toAttributedString(_ options: DownOptions = .default, styler: Styler) throws -> NSAttributedString {
-        let tree = try self.toAST(options)
+    public func toAttributedString(_ options: DownOptions = .default, styler: Styler, extensions: [MarkdownExtension] = []) throws -> NSAttributedString {
+        let tree = try self.toAST(options, extensions: extensions)
         
         guard tree.type == CMARK_NODE_DOCUMENT else {
             throw DownErrors.astRenderingError

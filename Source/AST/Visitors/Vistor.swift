@@ -34,6 +34,7 @@ public protocol Visitor {
     func visit(link node: Link) -> Result
     func visit(image node: Image) -> Result
     func visitChildren(of node: Node) -> [Result]
+    func visit(strikethrough node: Strikethrough) -> Result
 }
 
 extension Visitor {
@@ -60,6 +61,7 @@ extension Visitor {
             case is Strong:         return visit(strong: child as! Strong)
             case is Link:           return visit(link: child as! Link)
             case is Image:          return visit(image: child as! Image)
+            case is Strikethrough:  return visit(strikethrough: child as! Strikethrough)
             default:
                 assertionFailure("Unexpected child")
                 return nil
