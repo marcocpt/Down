@@ -58,6 +58,22 @@
 		85446EDC22E4014F00492773 /* cmark-gfm_version.h in Headers */ = {isa = PBXBuildFile; fileRef = 85446EDB22E4014F00492773 /* cmark-gfm_version.h */; };
 		85446EDE22E4016600492773 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 85446EDD22E4016600492773 /* config.h */; };
 		85446EE022E4036F00492773 /* html.h in Headers */ = {isa = PBXBuildFile; fileRef = 85446EDF22E4036E00492773 /* html.h */; };
+		85446F1122E4530600492773 /* strikethrough.c in Sources */ = {isa = PBXBuildFile; fileRef = 85446F0122E4530600492773 /* strikethrough.c */; };
+		85446F1222E4530600492773 /* cmark-gfm-core-extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 85446F0222E4530600492773 /* cmark-gfm-core-extensions.h */; };
+		85446F1322E4530700492773 /* autolink.c in Sources */ = {isa = PBXBuildFile; fileRef = 85446F0322E4530600492773 /* autolink.c */; };
+		85446F1422E4530700492773 /* table.c in Sources */ = {isa = PBXBuildFile; fileRef = 85446F0422E4530600492773 /* table.c */; };
+		85446F1622E4530700492773 /* tasklist.h in Headers */ = {isa = PBXBuildFile; fileRef = 85446F0622E4530600492773 /* tasklist.h */; };
+		85446F1722E4530700492773 /* ext_scanners.c in Sources */ = {isa = PBXBuildFile; fileRef = 85446F0722E4530600492773 /* ext_scanners.c */; };
+		85446F1822E4530700492773 /* tagfilter.c in Sources */ = {isa = PBXBuildFile; fileRef = 85446F0822E4530600492773 /* tagfilter.c */; };
+		85446F1922E4530700492773 /* autolink.h in Headers */ = {isa = PBXBuildFile; fileRef = 85446F0922E4530600492773 /* autolink.h */; };
+		85446F1A22E4530700492773 /* strikethrough.h in Headers */ = {isa = PBXBuildFile; fileRef = 85446F0A22E4530600492773 /* strikethrough.h */; };
+		85446F1C22E4530700492773 /* tasklist.c in Sources */ = {isa = PBXBuildFile; fileRef = 85446F0C22E4530600492773 /* tasklist.c */; };
+		85446F1D22E4530700492773 /* table.h in Headers */ = {isa = PBXBuildFile; fileRef = 85446F0D22E4530600492773 /* table.h */; };
+		85446F1E22E4530700492773 /* tagfilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 85446F0E22E4530600492773 /* tagfilter.h */; };
+		85446F1F22E4530700492773 /* ext_scanners.h in Headers */ = {isa = PBXBuildFile; fileRef = 85446F0F22E4530600492773 /* ext_scanners.h */; };
+		85446F2022E4530700492773 /* core-extensions.c in Sources */ = {isa = PBXBuildFile; fileRef = 85446F1022E4530600492773 /* core-extensions.c */; };
+		85446F2222E455B900492773 /* cmark-gfm-extensions_export.h in Headers */ = {isa = PBXBuildFile; fileRef = 85446F2122E455B900492773 /* cmark-gfm-extensions_export.h */; };
+		8548B46D22E501BA002F7BD9 /* libcmark.h in Headers */ = {isa = PBXBuildFile; fileRef = 8548B46C22E501BA002F7BD9 /* libcmark.h */; };
 		8A569F481E6B3ED2008BE2AC /* DownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43AE5D91CFFD0D0006E1522 /* DownView.swift */; };
 		8A569F6E1E6B3EDE008BE2AC /* DownASTRenderable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D486E9951CFDD4860059FD7C /* DownASTRenderable.swift */; };
 		8A569F6F1E6B3EDE008BE2AC /* DownAttributedStringRenderable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CF88971CFFAC2C00F07FD1 /* DownAttributedStringRenderable.swift */; };
@@ -217,6 +233,24 @@
 		85446EDB22E4014F00492773 /* cmark-gfm_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "cmark-gfm_version.h"; sourceTree = "<group>"; };
 		85446EDD22E4016600492773 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		85446EDF22E4036E00492773 /* html.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = html.h; sourceTree = "<group>"; };
+		85446F0122E4530600492773 /* strikethrough.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = strikethrough.c; sourceTree = "<group>"; };
+		85446F0222E4530600492773 /* cmark-gfm-core-extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "cmark-gfm-core-extensions.h"; sourceTree = "<group>"; };
+		85446F0322E4530600492773 /* autolink.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = autolink.c; sourceTree = "<group>"; };
+		85446F0422E4530600492773 /* table.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = table.c; sourceTree = "<group>"; };
+		85446F0522E4530600492773 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		85446F0622E4530600492773 /* tasklist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tasklist.h; sourceTree = "<group>"; };
+		85446F0722E4530600492773 /* ext_scanners.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ext_scanners.c; sourceTree = "<group>"; };
+		85446F0822E4530600492773 /* tagfilter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tagfilter.c; sourceTree = "<group>"; };
+		85446F0922E4530600492773 /* autolink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = autolink.h; sourceTree = "<group>"; };
+		85446F0A22E4530600492773 /* strikethrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strikethrough.h; sourceTree = "<group>"; };
+		85446F0B22E4530600492773 /* ext_scanners.re */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ext_scanners.re; sourceTree = "<group>"; };
+		85446F0C22E4530600492773 /* tasklist.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tasklist.c; sourceTree = "<group>"; };
+		85446F0D22E4530600492773 /* table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = table.h; sourceTree = "<group>"; };
+		85446F0E22E4530600492773 /* tagfilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tagfilter.h; sourceTree = "<group>"; };
+		85446F0F22E4530600492773 /* ext_scanners.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ext_scanners.h; sourceTree = "<group>"; };
+		85446F1022E4530600492773 /* core-extensions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "core-extensions.c"; sourceTree = "<group>"; };
+		85446F2122E455B900492773 /* cmark-gfm-extensions_export.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "cmark-gfm-extensions_export.h"; sourceTree = "<group>"; };
+		8548B46C22E501BA002F7BD9 /* libcmark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libcmark.h; sourceTree = "<group>"; };
 		8A569F401E6B3E50008BE2AC /* Down.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Down.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AFAEAFB1E6E32E900E09B68 /* DownTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DownTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C73B9B522A687C400C8E60F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
@@ -287,9 +321,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		85446F0022E4530600492773 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				85446F0122E4530600492773 /* strikethrough.c */,
+				85446F0222E4530600492773 /* cmark-gfm-core-extensions.h */,
+				85446F2122E455B900492773 /* cmark-gfm-extensions_export.h */,
+				85446F0322E4530600492773 /* autolink.c */,
+				85446F0422E4530600492773 /* table.c */,
+				85446F0522E4530600492773 /* CMakeLists.txt */,
+				85446F0622E4530600492773 /* tasklist.h */,
+				85446F0722E4530600492773 /* ext_scanners.c */,
+				85446F0822E4530600492773 /* tagfilter.c */,
+				85446F0922E4530600492773 /* autolink.h */,
+				85446F0A22E4530600492773 /* strikethrough.h */,
+				85446F0B22E4530600492773 /* ext_scanners.re */,
+				85446F0C22E4530600492773 /* tasklist.c */,
+				85446F0D22E4530600492773 /* table.h */,
+				85446F0E22E4530600492773 /* tagfilter.h */,
+				85446F0F22E4530600492773 /* ext_scanners.h */,
+				85446F1022E4530600492773 /* core-extensions.c */,
+			);
+			path = extensions;
+			sourceTree = "<group>";
+		};
 		8C73B9B422A687C400C8E60F /* include */ = {
 			isa = PBXGroup;
 			children = (
+				8548B46C22E501BA002F7BD9 /* libcmark.h */,
 				8C73B9B522A687C400C8E60F /* module.modulemap */,
 			);
 			path = include;
@@ -377,6 +436,7 @@
 		D4201EF61CFA5D63008EEC6E /* cmark */ = {
 			isa = PBXGroup;
 			children = (
+				85446F0022E4530600492773 /* extensions */,
 				8C73B9B422A687C400C8E60F /* include */,
 				85446EB122E4004100492773 /* arena.c */,
 				85446EA622E4003F00492773 /* blocks.c */,
@@ -538,7 +598,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				85446E9522E4003600492773 /* cmark-gfm.h in Headers */,
+				85446F1A22E4530700492773 /* strikethrough.h in Headers */,
+				8548B46D22E501BA002F7BD9 /* libcmark.h in Headers */,
+				85446F1222E4530600492773 /* cmark-gfm-core-extensions.h in Headers */,
 				85446E9D22E4003600492773 /* cmark_ctype.h in Headers */,
+				85446F1922E4530700492773 /* autolink.h in Headers */,
 				85446E9722E4003600492773 /* map.h in Headers */,
 				85446E9122E4003600492773 /* node.h in Headers */,
 				85446E9022E4003600492773 /* iterator.h in Headers */,
@@ -547,12 +611,16 @@
 				85446E9622E4003600492773 /* parser.h in Headers */,
 				85446EDE22E4016600492773 /* config.h in Headers */,
 				85446EDC22E4014F00492773 /* cmark-gfm_version.h in Headers */,
+				85446F1F22E4530700492773 /* ext_scanners.h in Headers */,
+				85446F2222E455B900492773 /* cmark-gfm-extensions_export.h in Headers */,
 				85446E9E22E4003600492773 /* references.h in Headers */,
 				85446E9422E4003600492773 /* render.h in Headers */,
 				85446EA022E4003600492773 /* inlines.h in Headers */,
 				85446E9822E4003600492773 /* utf8.h in Headers */,
+				85446F1D22E4530700492773 /* table.h in Headers */,
 				85446E9B22E4003600492773 /* buffer.h in Headers */,
 				85446E9A22E4003600492773 /* cmark-gfm-extension_api.h in Headers */,
+				85446F1E22E4530700492773 /* tagfilter.h in Headers */,
 				85446EDA22E4013300492773 /* cmark-gfm_export.h in Headers */,
 				85446E9C22E4003600492773 /* footnotes.h in Headers */,
 				85446E9F22E4003600492773 /* plugin.h in Headers */,
@@ -560,6 +628,7 @@
 				85446EE022E4036F00492773 /* html.h in Headers */,
 				85446E9222E4003600492773 /* scanners.h in Headers */,
 				85446E9922E4003600492773 /* registry.h in Headers */,
+				85446F1622E4530700492773 /* tasklist.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -701,10 +770,16 @@
 				8A569F481E6B3ED2008BE2AC /* DownView.swift in Sources */,
 				85446ED022E4004600492773 /* inlines.c in Sources */,
 				85446ECF22E4004600492773 /* node.c in Sources */,
+				85446F1322E4530700492773 /* autolink.c in Sources */,
 				EEEBEE63225D2AD400AE438D /* HtmlInline.swift in Sources */,
 				EEEBEE6D225D2B3200AE438D /* Image.swift in Sources */,
+				85446F1722E4530700492773 /* ext_scanners.c in Sources */,
 				85446EC122E4004600492773 /* blocks.c in Sources */,
+				85446F1122E4530600492773 /* strikethrough.c in Sources */,
+				85446F2022E4530700492773 /* core-extensions.c in Sources */,
+				85446F1822E4530700492773 /* tagfilter.c in Sources */,
 				EEEBEE4D225D2A0200AE438D /* Item.swift in Sources */,
+				85446F1C22E4530700492773 /* tasklist.c in Sources */,
 				85446EC922E4004600492773 /* footnotes.c in Sources */,
 				85446EBF22E4004600492773 /* render.c in Sources */,
 				8A569F6F1E6B3EDE008BE2AC /* DownAttributedStringRenderable.swift in Sources */,
@@ -721,6 +796,7 @@
 				8A569F791E6B3EE7008BE2AC /* DownOptions.swift in Sources */,
 				85446EC322E4004600492773 /* commonmark.c in Sources */,
 				EEEBEE72225D2F9200AE438D /* AttributedStringVisitor.swift in Sources */,
+				85446F1422E4530700492773 /* table.c in Sources */,
 				85446ECA22E4004600492773 /* buffer.c in Sources */,
 				EEEBEE4B225D29D800AE438D /* List.swift in Sources */,
 				85446ECC22E4004600492773 /* arena.c in Sources */,
@@ -805,7 +881,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "${SRCROOT}/Source/cmark";
+				SWIFT_INCLUDE_PATHS = "${SRCROOT}/Source/cmark ${SRCROOT}/Source/cmark/extensions";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -830,7 +906,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = "${SRCROOT}/Source/cmark";
+				SWIFT_INCLUDE_PATHS = "${SRCROOT}/Source/cmark ${SRCROOT}/Source/cmark/extensions";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

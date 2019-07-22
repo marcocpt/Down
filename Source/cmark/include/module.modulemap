@@ -1,4 +1,7 @@
 module libcmark [system][extern_c] {
     header "../node.h"
+    header "../extensions/cmark-gfm-core-extensions.h"
+    header "../include/libcmark.h"
+    header "../cmark-gfm.h"
     export *
 }
