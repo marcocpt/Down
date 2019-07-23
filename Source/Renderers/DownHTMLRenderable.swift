@@ -10,7 +10,7 @@ import Foundation
 import libcmark
 
 public protocol DownHTMLRenderable: DownRenderable {
-    func toHTML(_ options: DownOptions, extensions: [MarkdownExtension]) throws -> String
+    func toHTML(_ options: DownOptions) throws -> String
 }
 
 extension DownHTMLRenderable {
@@ -19,8 +19,8 @@ extension DownHTMLRenderable {
     /// - Parameter options: `DownOptions` to modify parsing or rendering, defaulting to `.default`
     /// - Returns: HTML string
     /// - Throws: `DownErrors` depending on the scenario
-    public func toHTML(_ options: DownOptions = .default, extensions: [MarkdownExtension] = []) throws -> String {
-        return try markdownString.toHTML(options, extensions: extensions)
+    public func toHTML(_ options: DownOptions = .default) throws -> String {
+        return try markdownString.toHTML(options, extensions: markdownExtensions)
     }
 }
 

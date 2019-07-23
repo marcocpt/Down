@@ -11,13 +11,19 @@ import Foundation
 public struct Down: DownASTRenderable, DownHTMLRenderable, DownXMLRenderable,
                     DownLaTeXRenderable, DownGroffRenderable, DownCommonMarkRenderable,
                     DownAttributedStringRenderable {
-    /// A string containing CommonMark Markdown
+    // DownRenderable: A string containing CommonMark Markdown
     public var markdownString: String
-
+    
+    /// DownRenderable: 使用的扩展类型
+    public var markdownExtensions: [MarkdownExtension]
+    
     /// Initializes the container with a CommonMark Markdown string which can then be rendered depending on protocol conformance
     ///
-    /// - Parameter markdownString: A string containing CommonMark Markdown
-    public init(markdownString: String) {
+    /// - Parameter
+    ///     - markdownString: A string containing CommonMark Markdown
+    ///     - extensions: 使用的扩展类型
+    public init(markdownString: String, extensions: [MarkdownExtension] = []) {
         self.markdownString = markdownString
+        self.markdownExtensions = extensions
     }
 }

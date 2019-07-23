@@ -28,7 +28,7 @@ open class DownView: WKWebView {
     ///   - options: `DownOptions` to modify parsing or rendering, defaulting to `.default`
     ///   - didLoadSuccessfully: Optional callback for when the web content has loaded successfully
     /// - Throws: `DownErrors` depending on the scenario
-    public init(frame: CGRect, markdownString: String, openLinksInBrowser: Bool = true, templateBundle: Bundle? = nil, configuration: WKWebViewConfiguration? = nil, options: DownOptions = .default, didLoadSuccessfully: DownViewClosure? = nil) throws {
+    public init(frame: CGRect, markdownString: String, openLinksInBrowser: Bool = true, templateBundle: Bundle? = nil, configuration: WKWebViewConfiguration? = nil, options: DownOptions = .default, extensions: [MarkdownExtension] = [], didLoadSuccessfully: DownViewClosure? = nil) throws {
         self.options = options
         self.didLoadSuccessfully = didLoadSuccessfully
 
@@ -47,7 +47,7 @@ open class DownView: WKWebView {
         #endif
 
         if openLinksInBrowser || didLoadSuccessfully != nil { navigationDelegate = self }
-        try loadHTMLView(markdownString)
+        try loadHTMLView(markdownString, extensions: extensions)
     }
 
     required public init?(coder: NSCoder) {
@@ -69,7 +69,7 @@ open class DownView: WKWebView {
     ///   - options: `DownOptions` to modify parsing or rendering, defaulting to `.default`
     ///   - didLoadSuccessfully: Optional callback for when the web content has loaded successfully
     /// - Throws: `DownErrors` depending on the scenario
-    public func update(markdownString: String, options: DownOptions? = nil, didLoadSuccessfully: DownViewClosure? = nil) throws {
+    public func update(markdownString: String, options: DownOptions? = nil, extensions: [MarkdownExtension] = [], didLoadSuccessfully: DownViewClosure? = nil) throws {
         // Note: As the init method sets this initially, we only overwrite them if
         // a non-nil value is passed in
         if let options = options {
@@ -79,7 +79,7 @@ open class DownView: WKWebView {
             self.didLoadSuccessfully = didLoadSuccessfully
         }
 
-        try loadHTMLView(markdownString)
+        try loadHTMLView(markdownString, extensions: extensions)
     }
 
     // MARK: - Private Properties
@@ -107,8 +107,8 @@ open class DownView: WKWebView {
 
 private extension DownView {
 
-    func loadHTMLView(_ markdownString: String) throws {
-        let htmlString = try markdownString.toHTML(options)
+    func loadHTMLView(_ markdownString: String, extensions: [MarkdownExtension]) throws {
+        let htmlString = try markdownString.toHTML(options, extensions: extensions)
         let pageHTMLString = try htmlFromTemplate(htmlString)
 
         #if os(iOS)

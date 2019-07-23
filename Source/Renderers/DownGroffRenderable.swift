@@ -22,7 +22,7 @@ extension DownGroffRenderable {
     /// - Returns: groff man string
     /// - Throws: `DownErrors` depending on the scenario
     public func toGroff(_ options: DownOptions = .default, width: Int32 = 0) throws -> String {
-        let ast = try DownASTRenderer.stringToAST(markdownString, options: options)
+        let ast = try DownASTRenderer.stringToAST(markdownString, options: options, extensions: markdownExtensions)
         let groff = try DownGroffRenderer.astToGroff(ast, options: options, width: width)
         cmark_node_free(ast)
         return groff

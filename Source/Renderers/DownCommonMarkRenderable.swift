@@ -22,7 +22,7 @@ extension DownCommonMarkRenderable {
     /// - Returns: CommonMark Markdown string
     /// - Throws: `DownErrors` depending on the scenario
     public func toCommonMark(_ options: DownOptions = .default, width: Int32 = 0) throws -> String {
-        let ast = try DownASTRenderer.stringToAST(markdownString, options: options)
+        let ast = try DownASTRenderer.stringToAST(markdownString, options: options, extensions: markdownExtensions)
         let commonMark = try DownCommonMarkRenderer.astToCommonMark(ast, options: options, width: width)
         cmark_node_free(ast)
         return commonMark

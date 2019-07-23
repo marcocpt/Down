@@ -20,7 +20,7 @@ extension DownXMLRenderable {
     /// - Returns: XML string
     /// - Throws: `DownErrors` depending on the scenario
     public func toXML(_ options: DownOptions = .default) throws -> String {
-        let ast = try DownASTRenderer.stringToAST(markdownString, options: options)
+        let ast = try DownASTRenderer.stringToAST(markdownString, options: options, extensions: markdownExtensions)
         let xml = try DownXMLRenderer.astToXML(ast, options: options)
         cmark_node_free(ast)
         return xml

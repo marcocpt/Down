@@ -120,5 +120,10 @@ private class EmptyStyler: Styler {
     func style(strong str: NSMutableAttributedString) {}
     func style(link str: NSMutableAttributedString, title: String?, url: String?) {}
     func style(image str: NSMutableAttributedString, title: String?, url: String?) {}
+    
+    func style(strikethrough str: NSMutableAttributedString) {}
+    func style(table str: NSMutableAttributedString) { }
+    func style(tableCell str: NSMutableAttributedString) { }
+    func style(tableRow str: NSMutableAttributedString) { }
 }
 
