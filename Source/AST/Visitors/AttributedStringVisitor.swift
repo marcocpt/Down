@@ -177,7 +177,8 @@ extension AttributedStringVisitor: Visitor {
     }
     
     public func visit(table node: Table) -> NSMutableAttributedString {
-        let s = visitChildren(of: node).joined
+        let s = visitChildren(of: node).joined("\n")
+        if node.hasSuccessor { s.append(.paragraphSeparator) }
         styler.style(table: s)
         return s
     }
@@ -189,7 +190,7 @@ extension AttributedStringVisitor: Visitor {
     }
     
     public func visit(tableRow node: TableRow) -> NSMutableAttributedString {
-        let s = visitChildren(of: node).joined
+        let s = visitChildren(of: node).joined("\t")
         styler.style(tableRow: s)
         return s
     }
@@ -200,6 +201,13 @@ extension AttributedStringVisitor: Visitor {
 private extension Sequence where Iterator.Element == NSMutableAttributedString {
     var joined: NSMutableAttributedString {
         return reduce(into: NSMutableAttributedString()) { $0.append($1) }
+    }
+    
+    func joined(_ with: String = "") -> NSMutableAttributedString {
+        return reduce(into: NSMutableAttributedString()) {
+            $0.append($1)
+            $0.append(NSAttributedString.init(string: with))
+        }
     }
 }
 

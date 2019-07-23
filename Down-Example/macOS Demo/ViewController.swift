@@ -50,13 +50,14 @@ private extension ViewController {
           let ast = try down.toAST()
           let result = Document(cmarkNode:ast).accept(DebugVisitor())
           print(result)
-//          let string = try down.toAttributedString(styler: MTStyler(values: StyleValues(), listPrefixAttributes: [:]))
+          let string = try down.toAttributedString(styler: MTStyler(values: StyleValues(), listPrefixAttributes: [:]))
 //          let string = NSAttributedString(string: try down.toCommonMark(DownOptions.sourcePos))
-          let string = try down.toAttributedString()
+//          let string = try down.toAttributedString()
             textView.textStorage?.append(string)
                         
-            textViewRight.textStorage?.append(NSAttributedString(string: readMeContents))
-            //            textViewRight.textStorage?.append(try down.toAttributedString())
+//            textViewRight.textStorage?.append(NSAttributedString(string: readMeContents))
+//            textViewRight.textStorage?.append(try down.toAttributedString())
+            textViewRight.textStorage?.append(NSAttributedString(string: try down.toCommonMark(DownOptions.sourcePos)))
         } catch {
             NSApp.presentError(error)
         }
@@ -331,10 +332,10 @@ struct MTStyler: Styler {
     }
     
     func style(tableCell str: NSMutableAttributedString) {
-        print(str)
+//        print(str)
     }
     
     func style(tableRow str: NSMutableAttributedString) {
-        print(str)
+//        print(str)
     }
 }
