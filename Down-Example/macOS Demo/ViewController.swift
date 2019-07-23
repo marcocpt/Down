@@ -41,7 +41,7 @@ private extension ViewController {
     }
     
     func renderDownInTextView() {
-        let readMeURL = Bundle.main.url(forResource: nil, withExtension: "md")!
+        let readMeURL = Bundle.main.url(forResource: "Test", withExtension: "md")!
         let readMeContents = try! String(contentsOf: readMeURL)
         
         do {
