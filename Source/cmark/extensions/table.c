@@ -154,7 +154,7 @@ static table_row *row_from_string(cmark_syntax_extension *self,
           ++cell->internal_offset;
         }
 
-        row->n_columns += 1;self    cmark_syntax_extension *    0x600003708780    0x0000600003708780
+        row->n_columns += 1;
         row->cells = cmark_llist_append(parser->mem, row->cells, cell);
       }
     }
