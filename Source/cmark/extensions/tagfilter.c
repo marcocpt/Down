@@ -53,6 +53,7 @@ static int filter(cmark_syntax_extension *ext, const unsigned char *tag,
   return 1;
 }
 
+/// tagfilter 参考: https://github.github.com/gfm/ "6.11Disallowed Raw HTML (extension)"
 cmark_syntax_extension *create_tagfilter_extension(void) {
   cmark_syntax_extension *ext = cmark_syntax_extension_new("tagfilter");
   cmark_syntax_extension_set_html_filter_func(ext, filter);

@@ -11,7 +11,7 @@
 #include "cmark_ctype.h"
 #include "buffer.h"
 
-/* Used as default value for cmark_strbuf->ptr so that people can always
+/** Used as default value for cmark_strbuf->ptr so that people can always
  * assume ptr is non-NULL and zero terminated even for new cmark_strbufs.
  */
 unsigned char cmark_strbuf__initbuf[1];
@@ -30,11 +30,11 @@ void cmark_strbuf_init(cmark_mem *mem, cmark_strbuf *buf,
   if (initial_size > 0)
     cmark_strbuf_grow(buf, initial_size);
 }
-/** buf 增加 add 的尺寸 */
+/// buf 增加 add 的尺寸
 static CMARK_INLINE void S_strbuf_grow_by(cmark_strbuf *buf, bufsize_t add) {
   cmark_strbuf_grow(buf, buf->size + add);
 }
-/** buf 够就返回，不够就加倍 */
+
 void cmark_strbuf_grow(cmark_strbuf *buf, bufsize_t target_size) {
   assert(target_size > 0);
 
@@ -97,13 +97,13 @@ void cmark_strbuf_sets(cmark_strbuf *buf, const char *string) {
   cmark_strbuf_set(buf, (const unsigned char *)string,
                    string ? (bufsize_t)strlen(string) : 0);
 }
-/** 在 buf 的有效字符最后添加参数 `c` 字符 */
+
 void cmark_strbuf_putc(cmark_strbuf *buf, int c) {
   S_strbuf_grow_by(buf, 1);
   buf->ptr[buf->size++] = (unsigned char)(c & 0xFF);
   buf->ptr[buf->size] = '\0';
 }
-/** 将 长度为 len 的 data 中的字符添加到 buf 后 */
+
 void cmark_strbuf_put(cmark_strbuf *buf, const unsigned char *data,
                       bufsize_t len) {
   if (len <= 0)

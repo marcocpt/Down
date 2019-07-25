@@ -49,19 +49,19 @@ typedef struct {
 } cmark_custom;
 
 enum cmark_node__internal_flags {
-  CMARK_NODE__OPEN = (1 << 0),
-  CMARK_NODE__LAST_LINE_BLANK = (1 << 1),
-  CMARK_NODE__LAST_LINE_CHECKED = (1 << 2),
+  CMARK_NODE__OPEN = (1 << 0),              /**< 是 open 状态 */
+  CMARK_NODE__LAST_LINE_BLANK = (1 << 1),   /**< 最后的行已经消耗 */
+  CMARK_NODE__LAST_LINE_CHECKED = (1 << 2), /**< 最后的行已经检查 */
 };
 
 struct cmark_node {
-  cmark_strbuf content;
+  cmark_strbuf content;             /**< 存储内容的字符串 */
 
-  struct cmark_node *next;
-  struct cmark_node *prev;
-  struct cmark_node *parent;
-  struct cmark_node *first_child;
-  struct cmark_node *last_child;
+  struct cmark_node *next;              /**< 下一个节点（平行） */
+  struct cmark_node *prev;              /**< 上一个节点（平行） */
+  struct cmark_node *parent;            /**< 父节点 */
+  struct cmark_node *first_child;       /**< 第一个字节点 */
+  struct cmark_node *last_child;        /**< 最后一个子节点 */
 
   void *user_data;
   cmark_free_func user_data_free_func;
@@ -71,8 +71,8 @@ struct cmark_node {
   int end_line;
   int end_column;
   int internal_offset;
-  uint16_t type;                    /**< 节点的类型 */
-  uint16_t flags;
+  uint16_t type;                        /**< 节点的类型 */
+  uint16_t flags;                       /**< cmark_node__internal_flags */
 
   cmark_syntax_extension *extension;
 

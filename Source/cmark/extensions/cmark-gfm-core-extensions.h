@@ -10,6 +10,7 @@ extern "C" {
 #include "config.h" // for bool
 #include <stdint.h>
 
+/// 确保已经注册了扩展语法，如果没有则注册则调用 cmark_register_plugin 进行c注册
 CMARK_GFM_EXTENSIONS_EXPORT
 void cmark_gfm_core_extensions_ensure_registered(void);
 

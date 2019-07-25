@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 
+///
 struct cmark_map_entry {
   struct cmark_map_entry *next;
   unsigned char *label;
@@ -19,6 +20,7 @@ struct cmark_map;
 
 typedef void (*cmark_map_free_f)(struct cmark_map *, cmark_map_entry *);
 
+///
 struct cmark_map {
   cmark_mem *mem;
   cmark_map_entry *refs;
@@ -30,6 +32,8 @@ struct cmark_map {
 typedef struct cmark_map cmark_map;
 
 unsigned char *normalize_map_label(cmark_mem *mem, cmark_chunk *ref);
+    
+/// 创建一个 url cmark_map
 cmark_map *cmark_map_new(cmark_mem *mem, cmark_map_free_f free);
 void cmark_map_free(cmark_map *map);
 cmark_map_entry *cmark_map_lookup(cmark_map *map, cmark_chunk *label);

@@ -12,10 +12,10 @@ bufsize_t _scan_at(bufsize_t (*scanner)(const unsigned char *), cmark_chunk *c, 
           return 0;
         } else {
 	  unsigned char lim = ptr[c->len];
-
-	  ptr[c->len] = '\0';
-	  res = scanner(ptr + offset);
-	  ptr[c->len] = lim;
+            
+            ptr[c->len] = '\0';
+            res = scanner(ptr + offset);
+            ptr[c->len] = lim;
         }
 
 	return res;

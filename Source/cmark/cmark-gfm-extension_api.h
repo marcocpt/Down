@@ -272,7 +272,8 @@ void cmark_syntax_extension_free               (cmark_mem *mem, cmark_syntax_ext
  */
 CMARK_GFM_EXPORT
 cmark_syntax_extension *cmark_syntax_extension_new (const char *name);
-
+    
+/// 在枚举 cmark_node_type 中添加新值。添加的新值与 CMARK_NODE_LAST_* 共用。
 CMARK_GFM_EXPORT
 cmark_node_type cmark_syntax_extension_add_node(int is_inline);
 

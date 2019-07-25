@@ -17,7 +17,7 @@ public struct Down: DownASTRenderable, DownHTMLRenderable, DownXMLRenderable,
     /// DownRenderable: 使用的扩展类型
     public var markdownExtensions: [MarkdownExtension]
     
-    /// Initializes the container with a CommonMark Markdown string which can then be rendered depending on protocol conformance
+    /// Initializes the container with a CommonMark Markdown string which can then be rendered depending on protocol conformancce
     ///
     /// - Parameter
     ///     - markdownString: A string containing CommonMark Markdown

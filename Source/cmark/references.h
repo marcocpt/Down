@@ -17,6 +17,8 @@ typedef struct cmark_reference cmark_reference;
 
 void cmark_reference_create(cmark_map *map, cmark_chunk *label,
                             cmark_chunk *url, cmark_chunk *title);
+    
+/// 创建一个 url cmark_map
 cmark_map *cmark_reference_map_new(cmark_mem *mem);
 
 #ifdef __cplusplus

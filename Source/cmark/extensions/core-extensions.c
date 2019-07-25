@@ -18,7 +18,6 @@ static int core_extensions_registration(cmark_plugin *plugin) {
   return 1;
 }
 
-/// 确保已经注册了扩展语法，如果没有则注册
 void cmark_gfm_core_extensions_ensure_registered(void) {
   static int registered = 0;
 

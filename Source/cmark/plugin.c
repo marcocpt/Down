@@ -26,7 +26,7 @@ cmark_plugin_free(cmark_plugin *plugin) {
                         (cmark_free_func) cmark_syntax_extension_free);
   CMARK_DEFAULT_MEM_ALLOCATOR.free(plugin);
 }
-
+/// 获取 plugin->syntax_extensions 将其置空，然后返回此值
 cmark_llist *
 cmark_plugin_steal_syntax_extensions(cmark_plugin *plugin) {
   cmark_llist *res = plugin->syntax_extensions;

@@ -24,6 +24,8 @@ bufsize_t _scan_html_block_end_4(const unsigned char *p);
 bufsize_t _scan_html_block_end_5(const unsigned char *p);
 bufsize_t _scan_link_title(const unsigned char *p);
 bufsize_t _scan_spacechars(const unsigned char *p);
+    
+/// 扫描标题
 bufsize_t _scan_atx_heading_start(const unsigned char *p);
 bufsize_t _scan_setext_heading_line(const unsigned char *p);
 bufsize_t _scan_open_code_fence(const unsigned char *p);
@@ -46,6 +48,8 @@ bufsize_t _scan_footnote_definition(const unsigned char *p);
 #define scan_html_block_end_5(c, n) _scan_at(&_scan_html_block_end_5, c, n)
 #define scan_link_title(c, n) _scan_at(&_scan_link_title, c, n)
 #define scan_spacechars(c, n) _scan_at(&_scan_spacechars, c, n)
+    
+/// 扫描标题
 #define scan_atx_heading_start(c, n) _scan_at(&_scan_atx_heading_start, c, n)
 #define scan_setext_heading_line(c, n)                                         \
   _scan_at(&_scan_setext_heading_line, c, n)

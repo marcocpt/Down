@@ -11,8 +11,8 @@ static void S_node_unlink(cmark_node *node);
 
 bool cmark_node_can_contain_type(cmark_node *node, cmark_node_type child_type) {
   if (child_type == CMARK_NODE_DOCUMENT) {
-      return false;
-    }
+    return false;
+  }
 
   if (node->extension && node->extension->can_contain_func) {
     return node->extension->can_contain_func(node->extension, node, child_type) != 0;

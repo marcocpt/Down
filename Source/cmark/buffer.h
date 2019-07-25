@@ -12,10 +12,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+    
+/// 字符串 buffer
 typedef struct {
-  cmark_mem *mem;
-  unsigned char *ptr;
+  cmark_mem *mem;               /**< 内存管理 */
+  unsigned char *ptr;           /**< 存储待解析的字符串 */
   bufsize_t asize, size;        /**< asize: 全部的空间，初始 256，size: 使用的尺寸。*/
 } cmark_strbuf;
 
@@ -72,9 +73,11 @@ void cmark_strbuf_set(cmark_strbuf *buf, const unsigned char *data,
 CMARK_GFM_EXPORT
 void cmark_strbuf_sets(cmark_strbuf *buf, const char *string);
 
+/// 在 buf 的有效字符最后添加参数 `c` 字符
 CMARK_GFM_EXPORT
 void cmark_strbuf_putc(cmark_strbuf *buf, int c);
 
+/// 将长度为 len 的 data 中的字符添加到 buf 后
 CMARK_GFM_EXPORT
 void cmark_strbuf_put(cmark_strbuf *buf, const unsigned char *data,
                       bufsize_t len);
@@ -82,6 +85,7 @@ void cmark_strbuf_put(cmark_strbuf *buf, const unsigned char *data,
 CMARK_GFM_EXPORT
 void cmark_strbuf_puts(cmark_strbuf *buf, const char *string);
 
+/// 清除 buf 中的内容（将 buf 的 size 清0，将 ptr[0] 置 '\0'）
 CMARK_GFM_EXPORT
 void cmark_strbuf_clear(cmark_strbuf *buf);
 

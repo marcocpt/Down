@@ -14,6 +14,7 @@ int cmark_version() { return CMARK_GFM_VERSION; }
 
 const char *cmark_version_string() { return CMARK_GFM_VERSION_STRING; }
 
+/// 调用 calloc (自动初始化该内存空间为零) 分配内存
 static void *xcalloc(size_t nmem, size_t size) {
   void *ptr = calloc(nmem, size);
   if (!ptr) {
@@ -23,6 +24,7 @@ static void *xcalloc(size_t nmem, size_t size) {
   return ptr;
 }
 
+/// 调用 realloc 重分配内存
 static void *xrealloc(void *ptr, size_t size) {
   void *new_ptr = realloc(ptr, size);
   if (!new_ptr) {
@@ -32,6 +34,7 @@ static void *xrealloc(void *ptr, size_t size) {
   return new_ptr;
 }
 
+/// 调用 free 释放e内存
 static void xfree(void *ptr) {
   free(ptr);
 }

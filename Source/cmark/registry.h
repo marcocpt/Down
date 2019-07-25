@@ -8,6 +8,7 @@ extern "C" {
 #include "cmark-gfm.h"
 #include "plugin.h"
 
+/// 使用 reg_fn 函数来注册扩展
 CMARK_GFM_EXPORT
 void cmark_register_plugin(cmark_plugin_init_func reg_fn);
 

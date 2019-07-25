@@ -39,11 +39,11 @@ static bool S_last_line_blank(const cmark_node *node) {
 static bool S_last_line_checked(const cmark_node *node) {
   return (node->flags & CMARK_NODE__LAST_LINE_CHECKED) != 0;
 }
-/** 获取节点的类型 */
+/// 获取节点的类型
 static CMARK_INLINE cmark_node_type S_type(const cmark_node *node) {
   return (cmark_node_type)node->type;
 }
-
+/// 设置 node 的行 blank 标志位
 static void S_set_last_line_blank(cmark_node *node, bool is_blank) {
   if (is_blank)
     node->flags |= CMARK_NODE__LAST_LINE_BLANK;
@@ -68,7 +68,7 @@ static void S_parser_feed(cmark_parser *parser, const unsigned char *buffer,
 
 static void S_process_line(cmark_parser *parser, const unsigned char *buffer,
                            bufsize_t bytes);
-
+/// 初始化一个节点并返回，flags 默认为 Open
 static cmark_node *make_block(cmark_mem *mem, cmark_node_type tag,
                               int start_line, int start_column) {
   cmark_node *e;
@@ -84,7 +84,7 @@ static cmark_node *make_block(cmark_mem *mem, cmark_node_type tag,
   return e;
 }
 
-// Create a root document node.
+/// Create a root document node. flags 默认为 Open
 static cmark_node *make_document(cmark_mem *mem) {
   cmark_node *e = make_block(mem, CMARK_NODE_DOCUMENT, 1, 1);
   return e;
@@ -100,7 +100,7 @@ int cmark_parser_attach_syntax_extension(cmark_parser *parser,
 
   return 1;
 }
-
+/// 释放解析器的 root 和 refmap
 static void cmark_parser_dispose(cmark_parser *parser) {
   if (parser->root)
     cmark_node_free(parser->root);
@@ -108,7 +108,7 @@ static void cmark_parser_dispose(cmark_parser *parser) {
   if (parser->refmap)
     cmark_map_free(parser->refmap);
 }
-
+/// 解析器复位，但保留 syntax_extensions，inline_syntax_extensions，options，mem
 static void cmark_parser_reset(cmark_parser *parser) {
   cmark_llist *saved_exts = parser->syntax_extensions;
   cmark_llist *saved_inline_exts = parser->inline_syntax_extensions;
@@ -141,7 +141,7 @@ cmark_parser *cmark_parser_new_with_mem(int options, cmark_mem *mem) {
   cmark_parser_reset(parser);
   return parser;
 }
-/** 使用 option 生成一个解析器 */
+
 cmark_parser *cmark_parser_new(int options) {
   extern cmark_mem CMARK_DEFAULT_MEM_ALLOCATOR;
   return cmark_parser_new_with_mem(options, &CMARK_DEFAULT_MEM_ALLOCATOR);
@@ -179,7 +179,7 @@ static bool is_blank(cmark_strbuf *s, bufsize_t offset) {
 
   return true;
 }
-
+/// 节点类型是 PARAGRAPH， HEADING 和 CODE_BLOCK
 static CMARK_INLINE bool accepts_lines(cmark_node_type block_type) {
   return (block_type == CMARK_NODE_PARAGRAPH ||
           block_type == CMARK_NODE_HEADING ||
@@ -194,7 +194,7 @@ static CMARK_INLINE bool contains_inlines(cmark_node *node) {
   return (node->type == CMARK_NODE_PARAGRAPH ||
           node->type == CMARK_NODE_HEADING);
 }
-
+/// 在 node->content 中添加 ch。
 static void add_line(cmark_node *node, cmark_chunk *ch, cmark_parser *parser) {
   int chars_to_tab;
   int i;
@@ -381,7 +381,7 @@ static cmark_node *finalize(cmark_parser *parser, cmark_node *b) {
   return parent;
 }
 
-// Add a node as child of another.  Return pointer to child.
+/// Add a node as child of another.  Return pointer to child.
 static cmark_node *add_child(cmark_parser *parser, cmark_node *parent,
                              cmark_node_type block_type, int start_column) {
   assert(parent);
@@ -681,11 +681,11 @@ void cmark_parser_feed_reentrant(cmark_parser *parser, const char *buffer, size_
   cmark_strbuf_sets(&parser->linebuf, cmark_strbuf_cstr(&saved_linebuf));
   cmark_strbuf_free(&saved_linebuf);
 }
-
+/// Feeds a string of length 'len' to 'parser'.
 static void S_parser_feed(cmark_parser *parser, const unsigned char *buffer,
                           size_t len, bool eof) {
-  const unsigned char *end = buffer + len;
-  static const uint8_t repl[] = {239, 191, 189};
+  const unsigned char *end = buffer + len;          /**< 指向 buffer 的末尾 */
+  static const uint8_t repl[] = {239, 191, 189};    /**< utf-8中的超级「备胎」(REPLACEMENT CHARACTER)，参考：https://liudanking.com/golang/utf-8_replacement_character/ */
 
   if (parser->last_buffer_ended_with_cr && *buffer == '\n') {
     // skip NL if last buffer ended with CR ; see #117
@@ -693,9 +693,9 @@ static void S_parser_feed(cmark_parser *parser, const unsigned char *buffer,
   }
   parser->last_buffer_ended_with_cr = false;
   while (buffer < end) {
-    const unsigned char *eol;
-    bufsize_t chunk_len;
-    bool process = false;
+    const unsigned char *eol;   // 找行
+    bufsize_t chunk_len;        // 找到的一行的长度
+    bool process = false;       // 找到了一行开始处理
     for (eol = buffer; eol < end; ++eol) {
       if (S_is_line_end_char(*eol)) {
         process = true;
@@ -728,8 +728,8 @@ static void S_parser_feed(cmark_parser *parser, const unsigned char *buffer,
         cmark_strbuf_put(&parser->linebuf, buffer, chunk_len);
       }
     }
-
-    buffer += chunk_len;
+      
+    buffer += chunk_len;    // buffer 指向已经处理块的后一个字符
     if (buffer < end) {
       if (*buffer == '\0') {
         // skip over NULL
@@ -765,12 +765,12 @@ static void chop_trailing_hashtags(cmark_chunk *ch) {
   }
 }
 
-// Check for thematic break.  On failure, return 0 and update
-// thematic_break_kill_pos with the index at which the
-// parse fails.  On success, return length of match.
-// "...three or more hyphens, asterisks,
-// or underscores on a line by themselves. If you wish, you may use
-// spaces between the hyphens or asterisks."
+/// Check for thematic break.  On failure, return 0 and update
+/// thematic_break_kill_pos with the index at which the
+/// parse fails.  On success, return length of match.
+/// "...three or more hyphens, asterisks,
+/// or underscores on a line by themselves. If you wish, you may use
+/// spaces between the hyphens or asterisks."
 static int S_scan_thematic_break(cmark_parser *parser, cmark_chunk *input,
                                  bufsize_t offset) {
   bufsize_t i;
@@ -799,9 +799,9 @@ static int S_scan_thematic_break(cmark_parser *parser, cmark_chunk *input,
   }
 }
 
-// Find first nonspace character from current offset, setting
-// parser->first_nonspace, parser->first_nonspace_column,
-// parser->indent, and parser->blank. Does not advance parser->offset.
+/// Find first nonspace character from current offset, setting
+/// parser->first_nonspace, parser->first_nonspace_column,
+/// parser->indent, and parser->blank. Does not advance parser->offset.
 static void S_find_first_nonspace(cmark_parser *parser, cmark_chunk *input) {
   char c;
   int chars_to_tab = TAB_STOP - (parser->column % TAB_STOP);
@@ -868,7 +868,7 @@ static void S_advance_offset(cmark_parser *parser, cmark_chunk *input,
     }
   }
 }
-
+/// 判断最后一个子节点是 open
 static bool S_last_child_is_open(cmark_node *container) {
   return container->last_child &&
          (container->last_child->flags & CMARK_NODE__OPEN);
@@ -1059,10 +1059,10 @@ static cmark_node *check_open_blocks(cmark_parser *parser, cmark_chunk *input,
       if (parser->blank)
         goto done;
       break;
-		case CMARK_NODE_FOOTNOTE_DEFINITION:
-			if (!parse_footnote_definition_block_prefix(parser, input, container))
-				goto done;
-			break;
+    case CMARK_NODE_FOOTNOTE_DEFINITION:
+        if (!parse_footnote_definition_block_prefix(parser, input, container))
+            goto done;
+        break;
     default:
       break;
     }
@@ -1296,7 +1296,7 @@ static void open_new_blocks(cmark_parser *parser, cmark_node **container,
     maybe_lazy = false;
   }
 }
-
+/// 将 input 中的文本添加到 container 中
 static void add_text_to_container(cmark_parser *parser, cmark_node *container,
                                   cmark_node *last_matched_container,
                                   cmark_chunk *input) {
@@ -1322,7 +1322,7 @@ static void add_text_to_container(cmark_parser *parser, cmark_node *container,
          container->start_line == parser->line_number));
 
   S_set_last_line_blank(container, last_line_blank);
-
+ 
   tmp = container;
   while (tmp->parent) {
     S_set_last_line_blank(tmp->parent, false);
@@ -1410,7 +1410,7 @@ static void add_text_to_container(cmark_parser *parser, cmark_node *container,
   }
 }
 
-/** See http://spec.commonmark.org/0.24/#phase-1-block-structure */
+/// 处理行。 See http://spec.commonmark.org/0.24/#phase-1-block-structure
 static void S_process_line(cmark_parser *parser, const unsigned char *buffer,
                            bufsize_t bytes) {
   cmark_node *last_matched_container;
@@ -1466,7 +1466,7 @@ static void S_process_line(cmark_parser *parser, const unsigned char *buffer,
 
   /* parser->current might have changed if feed_reentrant was called */
   if (current == parser->current)
-  add_text_to_container(parser, container, last_matched_container, &input);
+      add_text_to_container(parser, container, last_matched_container, &input);
 
 finished:
   parser->last_line_length = input.len;
@@ -1516,7 +1516,7 @@ cmark_node *cmark_parser_finish(cmark_parser *parser) {
   }
 
   res = parser->root;
-  parser->root = NULL;
+  parser->root = NULL;          // TODO: cmark_parser_reset 会释放 root ？
 
   cmark_parser_reset(parser);
 

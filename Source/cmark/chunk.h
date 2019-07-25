@@ -12,9 +12,9 @@
   { NULL, 0, 0 }
 
 typedef struct cmark_chunk {
-  unsigned char *data;
-  bufsize_t len;
-  bufsize_t alloc; // also implies a NULL-terminated string
+  unsigned char *data;  /**< 存储的字符串 */
+  bufsize_t len;        /**< 存储的字符串的长度 */
+  bufsize_t alloc;      /**< TODO: also implies a NULL-terminated string */
 } cmark_chunk;
 
 static CMARK_INLINE void cmark_chunk_free(cmark_mem *mem, cmark_chunk *c) {

@@ -20,10 +20,12 @@ struct cmark_plugin {
 
 cmark_llist *
 cmark_plugin_steal_syntax_extensions(cmark_plugin *plugin);
-
+    
+/// 初始化一个 cmark_plugin，默认为 NULL
 cmark_plugin *
 cmark_plugin_new(void);
 
+/// 释放插件
 void
 cmark_plugin_free(cmark_plugin *plugin);
 
