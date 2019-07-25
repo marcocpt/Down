@@ -328,23 +328,23 @@
 		85446F0022E4530600492773 /* extensions */ = {
 			isa = PBXGroup;
 			children = (
-				85446F0122E4530600492773 /* strikethrough.c */,
+				85446F0322E4530600492773 /* autolink.c */,
+				85446F0922E4530600492773 /* autolink.h */,
+				85446F0522E4530600492773 /* CMakeLists.txt */,
 				85446F0222E4530600492773 /* cmark-gfm-core-extensions.h */,
 				85446F2122E455B900492773 /* cmark-gfm-extensions_export.h */,
-				85446F0322E4530600492773 /* autolink.c */,
-				85446F0422E4530600492773 /* table.c */,
-				85446F0522E4530600492773 /* CMakeLists.txt */,
-				85446F0622E4530600492773 /* tasklist.h */,
-				85446F0722E4530600492773 /* ext_scanners.c */,
-				85446F0822E4530600492773 /* tagfilter.c */,
-				85446F0922E4530600492773 /* autolink.h */,
-				85446F0A22E4530600492773 /* strikethrough.h */,
-				85446F0B22E4530600492773 /* ext_scanners.re */,
-				85446F0C22E4530600492773 /* tasklist.c */,
-				85446F0D22E4530600492773 /* table.h */,
-				85446F0E22E4530600492773 /* tagfilter.h */,
-				85446F0F22E4530600492773 /* ext_scanners.h */,
 				85446F1022E4530600492773 /* core-extensions.c */,
+				85446F0722E4530600492773 /* ext_scanners.c */,
+				85446F0F22E4530600492773 /* ext_scanners.h */,
+				85446F0B22E4530600492773 /* ext_scanners.re */,
+				85446F0122E4530600492773 /* strikethrough.c */,
+				85446F0A22E4530600492773 /* strikethrough.h */,
+				85446F0422E4530600492773 /* table.c */,
+				85446F0D22E4530600492773 /* table.h */,
+				85446F0822E4530600492773 /* tagfilter.c */,
+				85446F0E22E4530600492773 /* tagfilter.h */,
+				85446F0C22E4530600492773 /* tasklist.c */,
+				85446F0622E4530600492773 /* tasklist.h */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
