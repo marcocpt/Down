@@ -86,10 +86,12 @@ private class EmptyStyler: Styler {
     func style(strong str: NSMutableAttributedString) {}
     func style(link str: NSMutableAttributedString, title: String?, url: String?) {}
     func style(image str: NSMutableAttributedString, title: String?, url: String?) {}
+    
+    // extensions
     func style(strikethrough str: NSMutableAttributedString) {}
-    func style(table str: NSMutableAttributedString) { }
-    func style(tableCell str: NSMutableAttributedString) { }
-    func style(tableRow str: NSMutableAttributedString) { }
+    func style(table str: NSMutableAttributedString) {}
+    func style(tableCell str: NSMutableAttributedString, inHeader: Bool) {}
+    func style(tableRow str: NSMutableAttributedString, isHeader: Bool) {}
 }
 
 struct StyleValues {
@@ -331,11 +333,18 @@ struct MTStyler: Styler {
         print(str)
     }
     
-    func style(tableCell str: NSMutableAttributedString) {
-//        print(str)
+    func style(tableCell str: NSMutableAttributedString, inHeader: Bool) {
+        if inHeader {
+            let attrs = str.fontAttributes(in: NSRange(location: 0, length: 1))
+            let font = (attrs.values.first as? NSFont) ?? NSFont(name: values.bodyFont, size: values.bodySize)!
+            let fm = NSFontManager.shared
+            str.addAttributes([.font: fm.convert(font, toHaveTrait: .boldFontMask)])
+        }
     }
     
-    func style(tableRow str: NSMutableAttributedString) {
-//        print(str)
+    func style(tableRow str: NSMutableAttributedString, isHeader: Bool) {
+        if isHeader {
+//            str.addAttributes([.backgroundColor: NSColor.red])
+        }
     }
 }

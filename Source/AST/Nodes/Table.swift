@@ -19,15 +19,24 @@ extension Table: CustomDebugStringConvertible {
     }
 }
 
-public class TableRow: BaseNode {}
-
-extension TableRow: CustomDebugStringConvertible {
-    public var debugDescription: String {
-        return "TableRow"
+public class TableRow: BaseNode {
+    var isHeader: Bool {
+        return cmark_gfm_extensions_get_table_row_is_header(self.cmarkNode) != 0
     }
 }
 
-public class TableCell: BaseNode {}
+extension TableRow: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return isHeader ? "TableRow - Header" : "TableRow"
+    }
+}
+
+public class TableCell: BaseNode {
+    var inHeader: Bool {
+        guard let parent = self.parent as? TableRow else { return false }
+        return parent.isHeader
+    }
+}
 
 extension TableCell: CustomDebugStringConvertible {
     public var debugDescription: String {

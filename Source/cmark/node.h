@@ -60,7 +60,7 @@ struct cmark_node {
   struct cmark_node *next;              /**< 下一个节点（平行） */
   struct cmark_node *prev;              /**< 上一个节点（平行） */
   struct cmark_node *parent;            /**< 父节点 */
-  struct cmark_node *first_child;       /**< 第一个字节点 */
+  struct cmark_node *first_child;       /**< 第一个子节点 */
   struct cmark_node *last_child;        /**< 最后一个子节点 */
 
   void *user_data;

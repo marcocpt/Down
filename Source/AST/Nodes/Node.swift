@@ -16,10 +16,13 @@ public protocol Node {
     
     /// The wrapped child nodes.
     var children: [Node] { get }
+    
+    /// The wrapped parent node.
+    var parent: Node? { get }
 }
 
 public extension Node {
-    /// True iff the node has a sibling that succeeds it.
+    /// True if the node has a sibling that succeeds it.
     var hasSuccessor: Bool {
         return cmark_node_next(cmarkNode) != nil
     }

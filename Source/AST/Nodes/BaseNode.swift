@@ -31,6 +31,12 @@ public class BaseNode: Node {
         return result
     }()
     
+    public private(set) lazy var parent: Node? = {
+        let rawParent = cmark_node_parent(cmarkNode)
+        guard let parent = rawParent?.wrap() else { return nil }
+        return parent
+    }()
+    
     public init(cmarkNode: CMarkNode) {
         self.cmarkNode = cmarkNode
     }

@@ -185,13 +185,13 @@ extension AttributedStringVisitor: Visitor {
     
     public func visit(tableCell node: TableCell) -> NSMutableAttributedString {
         let s = visitChildren(of: node).joined
-        styler.style(tableCell: s)
+        styler.style(tableCell: s, inHeader: node.inHeader)
         return s
     }
     
     public func visit(tableRow node: TableRow) -> NSMutableAttributedString {
         let s = visitChildren(of: node).joined("\t")
-        styler.style(tableRow: s)
+        styler.style(tableRow: s, isHeader: node.isHeader)
         return s
     }
 }
