@@ -209,6 +209,12 @@ typedef delimiter *(*cmark_inline_from_delim_func)(cmark_syntax_extension *exten
 
 /** Should return 'true' if 'input' can be contained in 'container',
  *  'false' otherwise.
+ *
+ * cmark will call the function provided through
+ * 'cmark_syntax_extension_set_match_block_func' when it
+ * iterates over an open block created by this extension,
+ * to determine  whether it could contain the new line.
+ * If no function was provided, cmark will close the block.
  */
 typedef int (*cmark_match_block_func)        (cmark_syntax_extension *extension,
                                        cmark_parser *parser,
@@ -298,19 +304,36 @@ CMARK_GFM_EXPORT
 void cmark_syntax_extension_set_match_inline_func(cmark_syntax_extension *extension,
                                                   cmark_match_inline_func func);
 
-/** See the documentation for 'cmark_syntax_extension'
+/** When an extension has pushed delimiters on the stack,
+ * the function provided through
+ * 'cmark_syntax_extension_set_inline_from_delim_func'
+ * will get called in a latter phase,
+ * when the inline parser has matched opener and closer delimiters
+ * created by the extension together.
+ *
+ * See the documentation for 'cmark_syntax_extension'
  */
 CMARK_GFM_EXPORT
 void cmark_syntax_extension_set_inline_from_delim_func(cmark_syntax_extension *extension,
                                                        cmark_inline_from_delim_func func);
-
-/** See the documentation for 'cmark_syntax_extension'
+/** For each character provided by the extension through
+ * 'cmark_syntax_extension_set_special_inline_chars',
+ * the function provided by the extension through
+ * 'cmark_syntax_extension_set_match_inline_func'
+ * will get called, it is the responsibility of the extension
+ * to scan the characters located at the current inline parsing offset
+ * with the cmark_inline_parser API.
+ *
+ * See the documentation for 'cmark_syntax_extension'
  */
 CMARK_GFM_EXPORT
 void cmark_syntax_extension_set_special_inline_chars(cmark_syntax_extension *extension,
                                                      cmark_llist *special_chars);
-
-/** See the documentation for 'cmark_syntax_extension'
+/** The extension can store whatever private data it might need
+ * with 'cmark_syntax_extension_set_private',
+ * and optionally define a free function for this data.
+ *
+ * See the documentation for 'cmark_syntax_extension'
  */
 CMARK_GFM_EXPORT
 void cmark_syntax_extension_set_get_type_string_func(cmark_syntax_extension *extension,
@@ -543,11 +566,18 @@ int cmark_parser_has_partially_consumed_tab(cmark_parser *parser);
 CMARK_GFM_EXPORT
 int cmark_parser_get_last_line_length(cmark_parser *parser);
 
+
 /** Add a child to 'parent' during the parsing process.
- *
- * If 'parent' isn't the kind of node that can accept this child,
- * this function will back up till it hits a node that can, closing
- * blocks as appropriate.
+ 
+ If 'parent' isn't the kind of node that can accept this child,
+ this function will back up till it hits a node that can, closing
+ blocks as appropriate.
+
+ @param parser 解析器
+ @param parent 父节点
+ @param block_type 子结点类型
+ @param start_column 起始列
+ @return 子节点
  */
 CMARK_GFM_EXPORT
 cmark_node*cmark_parser_add_child(cmark_parser *parser,

@@ -6,13 +6,13 @@
 #include "render.h"
 #include "node.h"
 #include "syntax_extension.h"
-
+/// 保证 need_cr 至少为 1
 static CMARK_INLINE void S_cr(cmark_renderer *renderer) {
   if (renderer->need_cr < 1) {
     renderer->need_cr = 1;
   }
 }
-
+/// 保证 need_cr 至少为 2
 static CMARK_INLINE void S_blankline(cmark_renderer *renderer) {
   if (renderer->need_cr < 2) {
     renderer->need_cr = 2;

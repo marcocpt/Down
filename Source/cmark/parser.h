@@ -24,10 +24,10 @@ struct cmark_parser {
   /** The last open block after a line is fully processed */
   struct cmark_node *current;
 
-  /** See the documentation for cmark_parser_get_line_number() in cmark.h */
+  /** Return the index of the line currently being parsed, starting with 1. See the documentation for cmark_parser_get_line_number() in cmark.h */
   int line_number;
 
-  /** See the documentation for cmark_parser_get_offset() in cmark.h */
+  /** byte position in input. See the documentation for cmark_parser_get_offset() in cmark.h */
   bufsize_t offset;
 
   /** virtual column number that takes into account tabs. See the documentation for cmark_parser_get_column() in cmark.h */
@@ -42,10 +42,11 @@ struct cmark_parser {
   /// TODO: 判断字符 ’*','-','_' 记录位置。参考函数：S_scan_thematic_break
   bufsize_t thematic_break_kill_pos;
 
-  /** See the documentation for cmark_parser_get_indent() in cmark.h */
+  /// Return the difference between the values returned by cmark_parser_get_first_nonspace_column() and cmark_parser_get_column().
+  /// See the documentation for cmark_parser_get_indent() in cmark.h
   int indent;
 
-  /// 当前处理的行被全部消耗。 See the documentation for cmark_parser_is_blank() in cmark.h
+  /// 当前处理的行被全部消化了。 See the documentation for cmark_parser_is_blank() in cmark.h
   bool blank;
 
   /** 消耗了 tab 字符。See the documentation for cmark_parser_has_partially_consumed_tab() in cmark.h */

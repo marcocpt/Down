@@ -68,7 +68,8 @@ static void S_parser_feed(cmark_parser *parser, const unsigned char *buffer,
 
 static void S_process_line(cmark_parser *parser, const unsigned char *buffer,
                            bufsize_t bytes);
-/// 初始化一个节点并返回，flags 默认为 Open
+
+/// 创建一个块节点，flags 默认为 Open
 static cmark_node *make_block(cmark_mem *mem, cmark_node_type tag,
                               int start_line, int start_column) {
   cmark_node *e;
@@ -186,6 +187,10 @@ static CMARK_INLINE bool accepts_lines(cmark_node_type block_type) {
           block_type == CMARK_NODE_CODE_BLOCK);
 }
 
+/// 判断 node 是否能够包含内联
+///
+/// 在标准语法中，只有 headings 和 paragraph 包含内联。\\n
+/// 参考：[3 Blocks and inlines](https://github.github.com/gfm/#blocks-and-inlines)
 static CMARK_INLINE bool contains_inlines(cmark_node *node) {
   if (node->extension && node->extension->contains_inlines_func) {
     return node->extension->contains_inlines_func(node->extension, node) != 0;
@@ -381,7 +386,9 @@ static cmark_node *finalize(cmark_parser *parser, cmark_node *b) {
   return parent;
 }
 
-/// Add a node as child of another.  Return pointer to child.
+/// Add a node as child of parent.  Return pointer to child.
+///
+/// block_type 作为 child 的结点类型，parent 作为父类，startcolumn 作为它的起始列，parser->line_number 作为行数。
 static cmark_node *add_child(cmark_parser *parser, cmark_node *parent,
                              cmark_node_type block_type, int start_column) {
   assert(parent);
@@ -993,6 +1000,15 @@ static bool parse_html_block_prefix(cmark_parser *parser,
   return res;
 }
 
+
+/**
+ 是否可以解析块 input 作为 container 的子节点
+
+ @param parser 解析器
+ @param container 父容器
+ @param input 作为子容器
+ @return 解析是否能成功
+ */
 static bool parse_extension_block(cmark_parser *parser,
                                   cmark_node *container,
                                   cmark_chunk *input)

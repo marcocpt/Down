@@ -66,10 +66,12 @@ static CMARK_INLINE const char *cmark_strbuf_cstr(const cmark_strbuf *buf) {
 
 #define cmark_strbuf_at(buf, n) ((buf)->ptr[n])
 
+/// 使用长度为 len 的 data 来设置 buf
 CMARK_GFM_EXPORT
 void cmark_strbuf_set(cmark_strbuf *buf, const unsigned char *data,
                       bufsize_t len);
 
+/// 用 string 来设置 buf
 CMARK_GFM_EXPORT
 void cmark_strbuf_sets(cmark_strbuf *buf, const char *string);
 
@@ -95,15 +97,18 @@ bufsize_t cmark_strbuf_strchr(const cmark_strbuf *buf, int c, bufsize_t pos);
 CMARK_GFM_EXPORT
 bufsize_t cmark_strbuf_strrchr(const cmark_strbuf *buf, int c, bufsize_t pos);
 
+/// 从开头丢弃长度为 n 的字符串
 CMARK_GFM_EXPORT
 void cmark_strbuf_drop(cmark_strbuf *buf, bufsize_t n);
 
 CMARK_GFM_EXPORT
 void cmark_strbuf_truncate(cmark_strbuf *buf, bufsize_t len);
 
+/// 裁剪 buf 中尾部的空白字符
 CMARK_GFM_EXPORT
 void cmark_strbuf_rtrim(cmark_strbuf *buf);
 
+/// 裁剪 buf 中开头的空白字符
 CMARK_GFM_EXPORT
 void cmark_strbuf_trim(cmark_strbuf *buf);
 

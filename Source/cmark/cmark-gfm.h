@@ -272,9 +272,9 @@ CMARK_GFM_EXPORT cmark_node *cmark_node_last_child(cmark_node *node);
 
 typedef enum {
   CMARK_EVENT_NONE,
-  CMARK_EVENT_DONE,
-  CMARK_EVENT_ENTER,
-  CMARK_EVENT_EXIT
+  CMARK_EVENT_DONE,     /**< 迭代完成，返回到根节点 */
+  CMARK_EVENT_ENTER,    /**< 已经进入了节点 */
+  CMARK_EVENT_EXIT      /**< 已经离开了子节点，返回到父节点（叶节点不会返回离开事件） */
 } cmark_event_type;
 
 /** Creates a new iterator starting at 'root'.  The current node and event

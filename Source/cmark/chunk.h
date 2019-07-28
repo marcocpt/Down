@@ -94,6 +94,7 @@ static CMARK_INLINE void cmark_chunk_set_cstr(cmark_mem *mem, cmark_chunk *c,
   }
 }
 
+/// 将 data 字符串转换为 cmark_chunk 类型
 static CMARK_INLINE cmark_chunk cmark_chunk_literal(const char *data) {
   bufsize_t len = data ? (bufsize_t)strlen(data) : 0;
   cmark_chunk c = {(unsigned char *)data, len, 0};

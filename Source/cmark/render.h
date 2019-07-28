@@ -17,14 +17,16 @@ struct cmark_renderer {
   cmark_strbuf *prefix;
   int column;
   int width;
-  int need_cr;
+  int need_cr;                  /**< 需要换行的行数 */
   bufsize_t last_breakable;
   bool begin_line;
   bool begin_content;
-  bool no_linebreaks;
-  bool in_tight_list_item;
+  bool no_linebreaks;           /**< 没有换行符 */
+  bool in_tight_list_item;      /**< 在紧凑型列表物体中 */
   void (*outc)(struct cmark_renderer *, cmark_node *, cmark_escaping, int32_t, unsigned char);
+  /// 处理换行
   void (*cr)(struct cmark_renderer *);
+  /// 处理空行
   void (*blankline)(struct cmark_renderer *);
   void (*out)(struct cmark_renderer *, cmark_node *, const char *, bool, cmark_escaping);
   unsigned int footnote_ix;

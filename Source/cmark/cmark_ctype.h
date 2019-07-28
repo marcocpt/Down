@@ -7,10 +7,10 @@ extern "C" {
 
 #include "cmark-gfm_export.h"
 
-/** Locale-independent versions of functions from ctype.h.
- * We want cmark to behave the same no matter what the system locale.
- */
-
+/// Locale-independent versions of functions from ctype.h.
+/// We want cmark to behave the same no matter what the system locale.
+///
+/// Returns 1 if c is a "whitespace" character as defined by the spec.
 CMARK_GFM_EXPORT
 int cmark_isspace(char c);
 

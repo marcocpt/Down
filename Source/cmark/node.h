@@ -66,12 +66,12 @@ struct cmark_node {
   void *user_data;
   cmark_free_func user_data_free_func;
 
-  int start_line;
-  int start_column;
-  int end_line;
-  int end_column;
+  int start_line;                       /**< 起始行 */
+  int start_column;                     /**< 起始列（在行中的偏移） */
+  int end_line;                         /**< 结束行 */
+  int end_column;                       /**< 结束列（在行中的偏移 */
   int internal_offset;
-  uint16_t type;                        /**< 节点的类型 */
+  uint16_t type;                        /**< 节点的类型 cmark_node_type */
   uint16_t flags;                       /**< cmark_node__internal_flags */
 
   cmark_syntax_extension *extension;
@@ -84,15 +84,17 @@ struct cmark_node {
     cmark_link link;
     cmark_custom custom;
     int html_block_type;
-    void *opaque;
+    void *opaque;                      /**< 自定义数据。在 table.c 中用来存储 node_table, node_table_row 或 node_cell */
   } as;
 };
 
+/// 获取节点的 content.mem 属性
 static CMARK_INLINE cmark_mem *cmark_node_mem(cmark_node *node) {
   return node->content.mem;
 }
 CMARK_GFM_EXPORT int cmark_node_check(cmark_node *node, FILE *out);
 
+/// 节点类型为块
 static CMARK_INLINE bool CMARK_NODE_TYPE_BLOCK_P(cmark_node_type node_type) {
 	return (node_type & CMARK_NODE_TYPE_MASK) == CMARK_NODE_TYPE_BLOCK;
 }
@@ -101,6 +103,7 @@ static CMARK_INLINE bool CMARK_NODE_BLOCK_P(cmark_node *node) {
 	return node != NULL && CMARK_NODE_TYPE_BLOCK_P((cmark_node_type) node->type);
 }
 
+/// 节点类型为内联
 static CMARK_INLINE bool CMARK_NODE_TYPE_INLINE_P(cmark_node_type node_type) {
 	return (node_type & CMARK_NODE_TYPE_MASK) == CMARK_NODE_TYPE_INLINE;
 }
@@ -109,6 +112,9 @@ static CMARK_INLINE bool CMARK_NODE_INLINE_P(cmark_node *node) {
 	return node != NULL && CMARK_NODE_TYPE_INLINE_P((cmark_node_type) node->type);
 }
 
+/// node 能够包含 child_type 类型
+///
+/// 如果 node 是扩展的，就调用扩展的 can_contain_func 函数
 CMARK_GFM_EXPORT bool cmark_node_can_contain_type(cmark_node *node, cmark_node_type child_type);
 
 #ifdef __cplusplus

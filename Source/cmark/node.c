@@ -13,7 +13,7 @@ bool cmark_node_can_contain_type(cmark_node *node, cmark_node_type child_type) {
   if (child_type == CMARK_NODE_DOCUMENT) {
     return false;
   }
-
+  // 使用包含扩展的节点的自定义函数 can_contain_func 判断
   if (node->extension && node->extension->can_contain_func) {
     return node->extension->can_contain_func(node->extension, node, child_type) != 0;
   }
@@ -47,12 +47,14 @@ bool cmark_node_can_contain_type(cmark_node *node, cmark_node_type child_type) {
   return false;
 }
 
+/// node 能够包含 child 节点。mem 相等，且没有继承关系，且不相等
 static bool S_can_contain(cmark_node *node, cmark_node *child) {
   cmark_node *cur;
 
   if (node == NULL || child == NULL) {
     return false;
   }
+    // 节点的 content.mem 属性。TODO: 同一个 mem 也就是同一个解析器？
   if (NODE_MEM(node) != NODE_MEM(child)) {
     return 0;
   }
@@ -69,6 +71,7 @@ static bool S_can_contain(cmark_node *node, cmark_node *child) {
   return cmark_node_can_contain_type(node, (cmark_node_type) child->type);
 }
 
+/// TODO: 使用 type，mem 和 extension ？ 来创建节点
 cmark_node *cmark_node_new_with_mem_and_ext(cmark_node_type type, cmark_mem *mem, cmark_syntax_extension *extension) {
   cmark_node *node = (cmark_node *)mem->calloc(1, sizeof(*node));
   cmark_strbuf_init(mem, &node->content, 0);
@@ -758,7 +761,7 @@ int cmark_node_get_end_column(cmark_node *node) {
   return node->end_column;
 }
 
-// Unlink a node without adjusting its next, prev, and parent pointers.
+/// Unlink a node without adjusting its next, prev, and parent pointers.
 static void S_node_unlink(cmark_node *node) {
   if (node == NULL) {
     return;

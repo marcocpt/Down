@@ -61,6 +61,7 @@ void cmark_strbuf_grow(cmark_strbuf *buf, bufsize_t target_size) {
 
 bufsize_t cmark_strbuf_len(const cmark_strbuf *buf) { return buf->size; }
 
+/// 释放 buf
 void cmark_strbuf_free(cmark_strbuf *buf) {
   if (!buf)
     return;
@@ -192,6 +193,7 @@ bufsize_t cmark_strbuf_strrchr(const cmark_strbuf *buf, int c, bufsize_t pos) {
   return -1;
 }
 
+/// 按 len 的长度将 buf 中的字符截断
 void cmark_strbuf_truncate(cmark_strbuf *buf, bufsize_t len) {
   if (len < 0)
     len = 0;

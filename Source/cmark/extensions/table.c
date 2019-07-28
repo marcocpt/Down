@@ -14,26 +14,36 @@
 cmark_node_type CMARK_NODE_TABLE, CMARK_NODE_TABLE_ROW,
     CMARK_NODE_TABLE_CELL;
 
+/// 包含列数、软中断偏移和单元格链表(data 类型为 node_cell)
+///
+/// 主要用于生成 CMARK_NODE_TABLE_CELL ，不存储
+/// 获取单元格字符串：`p ((node_cell *)<#table_row *row#>->cells->data)->buf->ptr`
 typedef struct {
-  uint16_t n_columns;
-  int paragraph_offset;
-  cmark_llist *cells;
+  uint16_t n_columns;       /**< 一行中单元格的列个数 */
+  int paragraph_offset;     /**< 段落偏移。当一行中有软中断时，保存软中断的偏移位置 */
+  cmark_llist *cells;       /**< 一行中的 node_cell 链表 */
 } table_row;
 
-typedef struct {
-  uint16_t n_columns;
-  uint8_t *alignments;
-} node_table;
 
 typedef struct {
-  bool is_header;
+  uint16_t n_columns;       /**< 表格节点中的列个数 */
+  uint8_t *alignments;      /**< 表格节点中所有列的对齐方式, 例："rclr"  */
+} node_table;
+
+/// 存储 is_header
+typedef struct {
+  bool is_header;           /**< 是表头 */
 } node_table_row;
 
 typedef struct {
-  cmark_strbuf *buf;
-  int start_offset, end_offset, internal_offset;
+  cmark_strbuf *buf;        /**< 存字符串 */
+  int start_offset;         /**< 在行中单元格内容的起始偏移位置，包括不可见字符 */
+  int end_offset;           /**< 在行中单元格内容的结束偏移位置 */
+  int internal_offset;      /**< 记录第一个可见字符到 '|' 间的偏移 */
 } node_cell;
 
+// MARK: - -private start-
+/// 释放表格的单元格
 static void free_table_cell(cmark_mem *mem, void *data) {
   node_cell *cell = (node_cell *)data;
   cmark_strbuf_free((cmark_strbuf *)cell->buf);
@@ -41,6 +51,7 @@ static void free_table_cell(cmark_mem *mem, void *data) {
   mem->free(cell);
 }
 
+/// 释放表格的行
 static void free_table_row(cmark_mem *mem, table_row *row) {
   if (!row)
     return;
@@ -50,16 +61,19 @@ static void free_table_row(cmark_mem *mem, table_row *row) {
   mem->free(row);
 }
 
+/// 释放表格节点
 static void free_node_table(cmark_mem *mem, void *ptr) {
   node_table *t = (node_table *)ptr;
   mem->free(t->alignments);
   mem->free(t);
 }
 
+/// 释放表格行节点
 static void free_node_table_row(cmark_mem *mem, void *ptr) {
   mem->free(ptr);
 }
 
+/// 获得表格的列数。通过使用节点的 as.opaque 属性获取
 static int get_n_table_columns(cmark_node *node) {
   if (!node || node->type != CMARK_NODE_TABLE)
     return -1;
@@ -67,6 +81,7 @@ static int get_n_table_columns(cmark_node *node) {
   return (int)((node_table *)node->as.opaque)->n_columns;
 }
 
+/// 设置表格的列数。数据存储在 `((node_table *)node->as.opaque)->n_columns`
 static int set_n_table_columns(cmark_node *node, uint16_t n_columns) {
   if (!node || node->type != CMARK_NODE_TABLE)
     return 0;
@@ -75,6 +90,7 @@ static int set_n_table_columns(cmark_node *node, uint16_t n_columns) {
   return 1;
 }
 
+/// 获得表格的对齐方式
 static uint8_t *get_table_alignments(cmark_node *node) {
   if (!node || node->type != CMARK_NODE_TABLE)
     return 0;
@@ -82,6 +98,7 @@ static uint8_t *get_table_alignments(cmark_node *node) {
   return ((node_table *)node->as.opaque)->alignments;
 }
 
+/// 设置表格的对齐方式
 static int set_table_alignments(cmark_node *node, uint8_t *alignments) {
   if (!node || node->type != CMARK_NODE_TABLE)
     return 0;
@@ -90,6 +107,7 @@ static int set_table_alignments(cmark_node *node, uint8_t *alignments) {
   return 1;
 }
 
+/// 转义 string 中的 '\|'
 static cmark_strbuf *unescape_pipes(cmark_mem *mem, unsigned char *string, bufsize_t len)
 {
   cmark_strbuf *res = (cmark_strbuf *)mem->calloc(1, sizeof(cmark_strbuf));
@@ -98,7 +116,8 @@ static cmark_strbuf *unescape_pipes(cmark_mem *mem, unsigned char *string, bufsi
   cmark_strbuf_init(mem, res, len + 1);
   cmark_strbuf_put(res, string, len);
   cmark_strbuf_putc(res, '\0');
-
+    
+  // 当遇到字符 '\|' 时，去掉 '\'
   for (r = 0, w = 0; r < len; ++r) {
     if (res->ptr[r] == '\\' && res->ptr[r + 1] == '|')
       r++;
@@ -111,11 +130,22 @@ static cmark_strbuf *unescape_pipes(cmark_mem *mem, unsigned char *string, bufsi
   return res;
 }
 
+/**
+ 将 string 的内容转换为 table_row 输出。
+
+ @param self cmark_syntax_extension 未使用
+ @param parser 解析器
+ @param string 待转换的字符串
+ @param len string 的长度
+ @return string 生成的 table_row
+ */
 static table_row *row_from_string(cmark_syntax_extension *self,
                                   cmark_parser *parser, unsigned char *string,
                                   int len) {
-  table_row *row = NULL;
-  bufsize_t cell_matched = 1, pipe_matched = 1, offset;
+  table_row *row = NULL;        /**< 返回值 */
+  bufsize_t cell_matched = 1;   /**< 匹配单元格中非空字符开始到末尾或 ’|‘ 间的单元格长度 */
+  bufsize_t pipe_matched = 1;   /**< 匹配 ’|‘ 到下一个非空字符的长度 */
+  bufsize_t offset;
   int cell_end_offset;
 
   row = (table_row *)parser->mem->calloc(1, sizeof(table_row));
@@ -132,7 +162,8 @@ static table_row *row_from_string(cmark_syntax_extension *self,
 
     if (cell_matched || pipe_matched) {
       cell_end_offset = offset + cell_matched - 1;
-
+        
+      // 如果遇到软中断，就丢弃（会处理为段落），并记录偏移到 paragraph_offset
       if (string[cell_end_offset] == '\n' || string[cell_end_offset] == '\r') {
         row->paragraph_offset = cell_end_offset;
 
@@ -148,7 +179,7 @@ static table_row *row_from_string(cmark_syntax_extension *self,
         cell->buf = cell_buf;
         cell->start_offset = offset;
         cell->end_offset = cell_end_offset;
-
+        // 移除每个单元格中 '|' 后的空字符
         while (cell->start_offset > 0 && string[cell->start_offset - 1] != '|') {
           --cell->start_offset;
           ++cell->internal_offset;
@@ -160,7 +191,7 @@ static table_row *row_from_string(cmark_syntax_extension *self,
     }
 
     offset += cell_matched + pipe_matched;
-
+    // 处理行尾
     if (!pipe_matched) {
       pipe_matched = scan_table_row_end(string, len, offset);
       offset += pipe_matched;
@@ -175,6 +206,7 @@ static table_row *row_from_string(cmark_syntax_extension *self,
   return row;
 }
 
+/// 插入表格头部段落。在表格中有软中断时才调用
 static void try_inserting_table_header_paragraph(cmark_parser *parser,
                                                  cmark_node *parent_container,
                                                  unsigned char *parent_string,
@@ -189,22 +221,33 @@ static void try_inserting_table_header_paragraph(cmark_parser *parser,
   cmark_node_set_string_content(paragraph, (char *) paragraph_content->ptr);
   cmark_strbuf_free(paragraph_content);
   parser->mem->free(paragraph_content);
-
+  // 插不进去就释放掉
   if (!cmark_node_insert_before(parent_container, paragraph)) {
     parser->mem->free(paragraph);
   }
 }
 
+/**
+ private 尝试解析表格标记及表头行，成功则添加到 parent_container 中
+
+ @param self cmark_syntax_extension
+ @param parser 解析器
+ @param parent_container 父容器节点
+ @param input 输入的字符串
+ @param len input长度
+ @return parent_container
+ */
 static cmark_node *try_opening_table_header(cmark_syntax_extension *self,
                                             cmark_parser *parser,
                                             cmark_node *parent_container,
                                             unsigned char *input, int len) {
+  // 匹配表格标记的长度
   bufsize_t matched =
       scan_table_start(input, len, cmark_parser_get_first_nonspace(parser));
-  cmark_node *table_header;
-  table_row *header_row = NULL;
-  table_row *marker_row = NULL;
-  node_table_row *ntr;
+  cmark_node *table_header;         // 表的头结点，父类结点为 table，子类结点为 table_cell
+  table_row *header_row = NULL;     // 表头行（单元格第一行）
+  table_row *marker_row = NULL;     // 表格标记行 "|---|---|"
+  node_table_row *ntr;              // 存储是否为表头
   const char *parent_string;
   uint16_t i;
 
@@ -229,7 +272,7 @@ static cmark_node *try_opening_table_header(cmark_syntax_extension *self,
                                len - cmark_parser_get_first_nonspace(parser));
 
   assert(marker_row);
-
+  // 表格头的列数与表格标记的列数不匹配就释放
   if (header_row->n_columns != marker_row->n_columns) {
     free_table_row(parser->mem, header_row);
     free_table_row(parser->mem, marker_row);
@@ -250,7 +293,8 @@ static cmark_node *try_opening_table_header(cmark_syntax_extension *self,
     free_table_row(parser->mem, marker_row);
     return parent_container;
   }
-
+    
+  // 如果行中有软中断，将前面的其转换为段落插入
   if (header_row->paragraph_offset) {
     try_inserting_table_header_paragraph(parser, parent_container, (unsigned char *)parent_string,
                                          header_row->paragraph_offset);
@@ -265,6 +309,8 @@ static cmark_node *try_opening_table_header(cmark_syntax_extension *self,
   uint8_t *alignments =
       (uint8_t *)parser->mem->calloc(header_row->n_columns, sizeof(uint8_t));
   cmark_llist *it = marker_row->cells;
+    
+  // 设置表格排列方式
   for (i = 0; it; it = it->next, ++i) {
     node_cell *node = (node_cell *)it->data;
     bool left = node->buf->ptr[0] == ':', right = node->buf->ptr[node->buf->size - 1] == ':';
@@ -290,7 +336,7 @@ static cmark_node *try_opening_table_header(cmark_syntax_extension *self,
 
   {
     cmark_llist *tmp;
-
+    // 将单元格转换为节点，添加到 parent_container 中
     for (tmp = header_row->cells; tmp; tmp = tmp->next) {
       node_cell *cell = (node_cell *) tmp->data;
       cmark_node *header_cell = cmark_parser_add_child(parser, table_header,
@@ -312,12 +358,23 @@ static cmark_node *try_opening_table_header(cmark_syntax_extension *self,
   return parent_container;
 }
 
+
+/**
+ 尝试解析表格行
+
+ @param self cmark_syntax_extension
+ @param parser 解析器
+ @param parent_container 父容器，子节点会加入其中
+ @param input 待解析的字符串
+ @param len input 的长度
+ @return 解析完的表格行结点
+ */
 static cmark_node *try_opening_table_row(cmark_syntax_extension *self,
                                          cmark_parser *parser,
                                          cmark_node *parent_container,
                                          unsigned char *input, int len) {
-  cmark_node *table_row_block;
-  table_row *row;
+  cmark_node *table_row_block;      /**< 返回值 */
+  table_row *row;                  /**< 使用 input 生成的 table_row */
 
   if (cmark_parser_is_blank(parser))
     return NULL;
@@ -360,13 +417,26 @@ static cmark_node *try_opening_table_row(cmark_syntax_extension *self,
 
   return table_row_block;
 }
+// MARK: -private end-
 
+// MARK: - -extension start-
+/**
+ 尝试展开表格块，成功则添加到 parent_container 中
+
+ @param self cmark_syntax_extension
+ @param indented 已经解析缩进
+ @param parser 解析器
+ @param parent_container 父类容器结点
+ @param input 输入文本
+ @param len input 长度
+ @return 依据父节点类型决定。
+ */
 static cmark_node *try_opening_table_block(cmark_syntax_extension *self,
                                            int indented, cmark_parser *parser,
                                            cmark_node *parent_container,
                                            unsigned char *input, int len) {
   cmark_node_type parent_type = cmark_node_get_type(parent_container);
-
+  // 父节点是段落才能加表头节点，是表才能加行
   if (!indented && parent_type == CMARK_NODE_PARAGRAPH) {
     return try_opening_table_header(self, parser, parent_container, input, len);
   } else if (!indented && parent_type == CMARK_NODE_TABLE) {
@@ -376,10 +446,20 @@ static cmark_node *try_opening_table_block(cmark_syntax_extension *self,
   return NULL;
 }
 
+/**
+ parent_container 能够包含 input 转换的子节点，返回1；否则返回0。
+
+ @param self cmark_syntax_extension 未使用
+ @param parser 解析器
+ @param input 输入的文本
+ @param len input 的长度
+ @param parent_container 父容器
+ @return 匹配成功返回1，否则返回0
+ */
 static int matches(cmark_syntax_extension *self, cmark_parser *parser,
                    unsigned char *input, int len,
                    cmark_node *parent_container) {
-  int res = 0;
+  int res = 0;  // 返回值
 
   if (cmark_node_get_type(parent_container) == CMARK_NODE_TABLE) {
     cmark_arena_push();
@@ -395,6 +475,7 @@ static int matches(cmark_syntax_extension *self, cmark_parser *parser,
   return res;
 }
 
+/// 获得 node 的类型字符串
 static const char *get_type_string(cmark_syntax_extension *self,
                                    cmark_node *node) {
   if (node->type == CMARK_NODE_TABLE) {
@@ -411,6 +492,9 @@ static const char *get_type_string(cmark_syntax_extension *self,
   return "<unknown>";
 }
 
+/// node 是否能够包含 child_type。
+///
+/// cmark_syntax_extension->can_contain_func
 static int can_contain(cmark_syntax_extension *extension, cmark_node *node,
                        cmark_node_type child_type) {
   if (node->type == CMARK_NODE_TABLE) {
@@ -428,6 +512,9 @@ static int can_contain(cmark_syntax_extension *extension, cmark_node *node,
   return false;
 }
 
+/// 扩展语法的节点类型是否能包含内联。
+///
+/// cmark_syntax_extension->contains_inlines_func
 static int contains_inlines(cmark_syntax_extension *extension,
                             cmark_node *node) {
   return node->type == CMARK_NODE_TABLE_CELL;
@@ -437,7 +524,7 @@ static void commonmark_render(cmark_syntax_extension *extension,
                               cmark_renderer *renderer, cmark_node *node,
                               cmark_event_type ev_type, int options) {
   bool entering = (ev_type == CMARK_EVENT_ENTER);
-
+  // table 与其他之间需要有空行(至少两个 cr)；row 之间需要有 cr （至少一个 cr）
   if (node->type == CMARK_NODE_TABLE) {
     renderer->blankline(renderer);
   } else if (node->type == CMARK_NODE_TABLE_ROW) {
@@ -605,7 +692,9 @@ static void man_render(cmark_syntax_extension *extension,
     assert(false);
   }
 }
+// MARK: -extension end-
 
+// MARK: - -private start-
 static void html_table_add_align(cmark_strbuf* html, const char* align, int options) {
   if (options & CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES) {
     cmark_strbuf_puts(html, " style=\"text-align: ");
@@ -710,7 +799,9 @@ static void html_render(cmark_syntax_extension *extension,
     assert(false);
   }
 }
+// MARK: -private end-
 
+// MARK: - -extension start-
 static void opaque_alloc(cmark_syntax_extension *self, cmark_mem *mem, cmark_node *node) {
   if (node->type == CMARK_NODE_TABLE) {
     node->as.opaque = mem->calloc(1, sizeof(node_table));
@@ -729,6 +820,7 @@ static void opaque_free(cmark_syntax_extension *self, cmark_mem *mem, cmark_node
   }
 }
 
+/// 判断在 node 中的 c 是否为逃逸字符
 static int escape(cmark_syntax_extension *self, cmark_node *node, int c) {
   return
     node->type != CMARK_NODE_TABLE &&
@@ -760,7 +852,9 @@ cmark_syntax_extension *create_table_extension(void) {
 
   return self;
 }
+// MARK: -extension end-
 
+// MARK: - -API-
 uint16_t cmark_gfm_extensions_get_table_columns(cmark_node *node) {
   if (node->type != CMARK_NODE_TABLE)
     return 0;
