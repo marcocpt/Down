@@ -99,6 +99,10 @@ public extension UnsafeMutablePointer where Pointee == cmark_node {
     var title: String? {
         return String(cString: cmark_node_get_title(self))
     }
+    
+    var typeString: String? {
+        return String(cString: cmark_node_get_type_string(self))
+    }
 }
 
 private extension String {

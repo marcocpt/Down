@@ -89,12 +89,21 @@ struct MTStyler: Styler {
     }
     
     func style(list str: NSMutableAttributedString) {
-        str.addAttributes([.paragraphStyle: defaultParagraphStyle()])
+//        str.addAttributes([.paragraphStyle: defaultParagraphStyle()])
         print(str.debugDescription)
     }
     
-    func style(item str: NSMutableAttributedString) {
-        
+    func style(item str: NSMutableAttributedString, type: String) {
+        if type == ItemType.tasklist.rawValue {
+            
+            let a = NSAttributedString(string: "🔲\t")
+//            let attrs = str.fontAttributes(in: NSRange(location: 0, length: 1))
+//            let font = (attrs.values.first as? NSFont) ?? NSFont(name: values.bodyFont, size: values.bodySize * 2)!
+//            a.addAttributes([.font:font])
+            str.insert(a, at: 0)
+        } else {
+            str.insert(NSAttributedString(string: "💠\t"), at: 0)
+        }
     }
     
     func style(codeBlock str: NSMutableAttributedString, fenceInfo: String?) {

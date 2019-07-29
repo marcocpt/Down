@@ -8,12 +8,18 @@
 import Foundation
 import libcmark
 
-public class Item: BaseNode {}
+public class Item: BaseNode {
+    public private(set) lazy var typeString = cmarkNode.typeString
+}
 
 // MARK: - Debug
 
 extension Item: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "Item"
+        return "Item - \(typeString ?? "nil")"
     }
+}
+
+public enum ItemType: String {
+    case item, tasklist
 }

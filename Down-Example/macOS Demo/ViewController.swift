@@ -45,7 +45,7 @@ private extension ViewController {
         let readMeContents = try! String(contentsOf: readMeURL)
         
         do {
-          let extensions = [MarkdownExtension.strikethrough, .table]
+          let extensions = [MarkdownExtension.strikethrough, .table, .tasklist]
           let down = Down(markdownString: readMeContents, extensions: extensions)
           let ast = try down.toAST()
           let result = Document(cmarkNode:ast).accept(DebugVisitor())
@@ -56,8 +56,8 @@ private extension ViewController {
             textView.textStorage?.append(string)
                         
 //            textViewRight.textStorage?.append(NSAttributedString(string: readMeContents))
-//            textViewRight.textStorage?.append(try down.toAttributedString())
-            textViewRight.textStorage?.append(NSAttributedString(string: try down.toCommonMark(DownOptions.sourcePos)))
+            textViewRight.textStorage?.append(try down.toAttributedString())
+//            textViewRight.textStorage?.append(NSAttributedString(string: try down.toCommonMark(DownOptions.sourcePos)))
         } catch {
             NSApp.presentError(error)
         }

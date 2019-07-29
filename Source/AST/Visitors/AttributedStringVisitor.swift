@@ -50,7 +50,7 @@ extension AttributedStringVisitor: Visitor {
         items.enumerated().forEach { index, item in
             let prefix: String
             switch node.listType {
-            case .bullet: prefix = "•\t"
+            case .bullet: prefix = ""
             case .ordered(let start): prefix = "\(start + index).\t"
             }
             
@@ -67,7 +67,7 @@ extension AttributedStringVisitor: Visitor {
     public func visit(item node: Item) -> NSMutableAttributedString {
         let s = visitChildren(of: node).joined
         if node.hasSuccessor { s.append(.paragraphSeparator) }
-        styler.style(item: s)
+        styler.style(item: s, type:node.typeString!)
         return s
     }
     
