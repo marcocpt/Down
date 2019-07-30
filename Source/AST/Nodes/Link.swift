@@ -40,6 +40,6 @@ public class Link: BaseNode {
 
 extension Link: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "Link - title: \(title ?? "nil"), url: \(url ?? "nil"))"
+        return "Link - title: \(title ?? "nil"), url: \(url ?? "nil")"
     }
 }
