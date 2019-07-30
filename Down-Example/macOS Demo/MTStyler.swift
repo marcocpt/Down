@@ -14,7 +14,7 @@ struct StyleValues {
     let lineSpacing: CGFloat = 0
     
     let bodyFont = "Helvetica Neue"
-    let bodySize: CGFloat = 12
+    let bodySize: CGFloat = 14
     let bodySpacing: CGFloat = 18
     
     let h1Spacing: CGFloat = 18
@@ -23,30 +23,30 @@ struct StyleValues {
     
     let h2Spacing: CGFloat = 18
     let h2Font = "Helvetica Neue"
-    let h2Size: CGFloat = 24
+    let h2Size: CGFloat = 22
     
     let h3Spacing: CGFloat = 18
     let h3Font = "Helvetica Neue"
-    let h3Size: CGFloat = 18
+    let h3Size: CGFloat = 20
     
     let h4Spacing: CGFloat = 18
     let h4Font = "Helvetica Neue"
-    let h4Size: CGFloat = 24
+    let h4Size: CGFloat = 18
     
     let h5Spacing: CGFloat = 18
     let h5Font = "Helvetica Neue"
-    let h5Size: CGFloat = 14
+    let h5Size: CGFloat = 16
     
     let h6Spacing: CGFloat = 18
     let h6Font = "Helvetica Neue"
-    let h6Size: CGFloat = 24
+    let h6Size: CGFloat = 15
     
     
     let blockquoteIndent: CGFloat = 10
     let blockquoteSpacing: CGFloat = 18
     
     let codeFontName = "Menlo"
-    let codeFontSize: CGFloat = 12
+    let codeFontSize: CGFloat = 14
     let codeBackgroundColor = NSColor(calibratedWhite: 0.9, alpha: 1)
     let codeParagraphSpacing: CGFloat = 18
     let codeLineSpacing: CGFloat = 0
@@ -77,7 +77,7 @@ struct MTStyler: Styler {
     }
     
     func style(document str: NSMutableAttributedString) {
-        //    str.addAttributes([.font: NSFont(name: values.bodyFont, size: values.bodySize)!])
+//        str.addAttributes([.font: NSFont(name: values.bodyFont, size: values.bodySize)!])
     }
     
     func style(blockQuote str: NSMutableAttributedString) {
@@ -89,20 +89,22 @@ struct MTStyler: Styler {
     }
     
     func style(list str: NSMutableAttributedString) {
+        str.addAttributes([.font: NSFont(name: values.bodyFont, size: values.bodySize)!])
 //        str.addAttributes([.paragraphStyle: defaultParagraphStyle()])
-        print(str.debugDescription)
+        str.append(NSAttributedString(string: "\n"))
     }
     
-    func style(item str: NSMutableAttributedString, type: String) {
+    func style(item str: NSMutableAttributedString, type: String, orderValue: Int?, selected: Bool) {
         if type == ItemType.tasklist.rawValue {
-            
-            let a = NSAttributedString(string: "🔲\t")
-//            let attrs = str.fontAttributes(in: NSRange(location: 0, length: 1))
-//            let font = (attrs.values.first as? NSFont) ?? NSFont(name: values.bodyFont, size: values.bodySize * 2)!
-//            a.addAttributes([.font:font])
-            str.insert(a, at: 0)
+            if selected {
+                str.insert(NSAttributedString(string: "✅\t"), at: 0)
+            } else {
+                str.insert(NSAttributedString(string: "🔲\t"), at: 0)
+            }
+        } else if let order = orderValue {
+            str.insert(NSAttributedString(string: "\(order).\t"), at: 0)
         } else {
-            str.insert(NSAttributedString(string: "💠\t"), at: 0)
+            str.insert(NSAttributedString(string: "🔹\t"), at: 0)
         }
     }
     
@@ -167,7 +169,10 @@ struct MTStyler: Styler {
             size: sizeOptions[level]!)!
         let parStyle = defaultParagraphStyle()
         parStyle.paragraphSpacing = spacingOptions[level]!
-        str.insert(NSAttributedString.init(string: "# "), at: 0)
+        
+        let tail = NSMutableAttributedString(string: "H\(level) ")
+        tail.addAttribute(.backgroundColor, value: NSColor.orange, range: NSMakeRange(0, tail.length - 1))
+        str.insert(tail, at: 0)
         str.addAttributes([
             .paragraphStyle: parStyle,
             .font: font,
@@ -190,7 +195,7 @@ struct MTStyler: Styler {
     }
     
     func style(text str: NSMutableAttributedString) {
-        
+        str.addAttributes([.font: NSFont(name: values.bodyFont, size: values.bodySize)!])
     }
     
     func style(softBreak str: NSMutableAttributedString) {
@@ -255,7 +260,7 @@ struct MTStyler: Styler {
     }
     
     func style(table str: NSMutableAttributedString) {
-        print(str)
+
     }
     
     func style(tableCell str: NSMutableAttributedString, inHeader: Bool) {

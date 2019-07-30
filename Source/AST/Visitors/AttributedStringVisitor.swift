@@ -44,30 +44,29 @@ extension AttributedStringVisitor: Visitor {
     }
     
     public func visit(list node: List) -> NSMutableAttributedString {
-        let items = visitChildren(of: node)
-        
-        // Prepend prefixes to each item.
-        items.enumerated().forEach { index, item in
-            let prefix: String
-            switch node.listType {
-            case .bullet: prefix = ""
-            case .ordered(let start): prefix = "\(start + index).\t"
-            }
-            
-            let attrPrefix = NSAttributedString(string: prefix, attributes: styler.listPrefixAttributes)
-            item.insert(attrPrefix, at: 0)
-        }
-        
-        let s = items.joined
+        let s = visitChildren(of: node).joined
         if node.hasSuccessor { s.append(.paragraphSeparator) }
         styler.style(list: s)
         return s
     }
     
     public func visit(item node: Item) -> NSMutableAttributedString {
+        var orderValue: Int? = nil
+        if let nodeList = node.parent as? List {
+            switch nodeList.listType {
+            case .ordered(let start):
+                for (index, item) in nodeList.children.enumerated() {
+                    if let item = item as? Item, item.cmarkNode == node.cmarkNode {
+                        orderValue = start + index
+                        break
+                    }
+                }
+            case .bullet: break
+            }
+        }
         let s = visitChildren(of: node).joined
         if node.hasSuccessor { s.append(.paragraphSeparator) }
-        styler.style(item: s, type:node.typeString!)
+        styler.style(item: s, type:node.typeString!, orderValue: orderValue, selected: node.tasklistSelected)
         return s
     }
     
