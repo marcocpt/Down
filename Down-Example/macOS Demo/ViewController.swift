@@ -30,7 +30,7 @@ private extension ViewController {
         let readMeContents = try! String(contentsOf: readMeURL)
         
         do {
-            let downView = try DownView(frame: view.bounds, markdownString: readMeContents, extensions:[MarkdownExtension.table, .strikethrough], didLoadSuccessfully: {
+            let downView = try DownView(frame: view.bounds, markdownString: readMeContents, extensions:[MarkdownExtension.table, .strikethrough, .tasklist, .autolink], didLoadSuccessfully: {
                 print("Markdown was rendered.")
             })
             downView.autoresizingMask = [.width, .height]
@@ -45,7 +45,7 @@ private extension ViewController {
         let readMeContents = try! String(contentsOf: readMeURL)
         
         do {
-          let extensions = [MarkdownExtension.strikethrough, .table, .tasklist]
+          let extensions = [MarkdownExtension.strikethrough, .table, .tasklist, .autolink]
           let down = Down(markdownString: readMeContents, extensions: extensions)
           let ast = try down.toAST()
           let result = Document(cmarkNode:ast).accept(DebugVisitor())
