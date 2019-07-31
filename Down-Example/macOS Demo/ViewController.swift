@@ -9,16 +9,23 @@
 import Cocoa
 import Down
 
+
 final class ViewController: NSViewController {
 
     @IBOutlet var textView: NSTextView!
     @IBOutlet weak var textViewRight: NSTextView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        textView.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(textViewTextDidChange(_:)), name: NSText.didChangeNotification, object: self.textView)
 //        renderDownInWebView()
         renderDownInTextView()
         
+    }
+    
+    @objc func textViewTextDidChange(_ notification: NSNotification) {
+        guard let view = notification.object as? NSTextView else { return }
+        print(view.textStorage?.string)
     }
     
 }
@@ -64,3 +71,8 @@ private extension ViewController {
     }
 }
 
+extension ViewController: NSTextViewDelegate {
+    func textView(_ textView: NSTextView, shouldChangeTextIn affectedCharRange: NSRange, replacementString: String?) -> Bool {
+        return true
+    }
+}
