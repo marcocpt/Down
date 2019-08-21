@@ -46,6 +46,8 @@ struct cmark_node {
 
 基本结构如下：
 
+- Document
+
 - ↳ Table
 	- ↳ TableRow
 	  - ↳ TableCell

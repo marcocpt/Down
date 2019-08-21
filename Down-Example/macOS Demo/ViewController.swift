@@ -14,6 +14,9 @@ final class ViewController: NSViewController {
 
     @IBOutlet var textView: NSTextView!
     @IBOutlet weak var textViewRight: NSTextView!
+    
+    let extensions = [MarkdownExtension.strikethrough, .table, .tasklist, .autolink]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         textView.delegate = self
@@ -25,7 +28,17 @@ final class ViewController: NSViewController {
     
     @objc func textViewTextDidChange(_ notification: NSNotification) {
         guard let view = notification.object as? NSTextView else { return }
-        print(view.textStorage?.string)
+        
+        do {
+          
+            let down = Down(markdownString: view.string, extensions: extensions)
+            let string = try down.toAttributedString(styler: MTStyler(values: StyleValues(), listPrefixAttributes: [:]))
+            textView.textStorage?.deleteCharacters(in: NSMakeRange(0, view.string.count))
+            textView.textStorage?.append(string)
+
+        }  catch {
+            NSApp.presentError(error)
+        }
     }
     
 }
@@ -37,7 +50,7 @@ private extension ViewController {
         let readMeContents = try! String(contentsOf: readMeURL)
         
         do {
-            let downView = try DownView(frame: view.bounds, markdownString: readMeContents, extensions:[MarkdownExtension.table, .strikethrough, .tasklist, .autolink], didLoadSuccessfully: {
+            let downView = try DownView(frame: view.bounds, markdownString: readMeContents, extensions:extensions, didLoadSuccessfully: {
                 print("Markdown was rendered.")
             })
             downView.autoresizingMask = [.width, .height]
@@ -52,7 +65,6 @@ private extension ViewController {
         let readMeContents = try! String(contentsOf: readMeURL)
         
         do {
-          let extensions = [MarkdownExtension.strikethrough, .table, .tasklist, .autolink]
           let down = Down(markdownString: readMeContents, extensions: extensions)
           let ast = try down.toAST()
           let result = Document(cmarkNode:ast).accept(DebugVisitor())
