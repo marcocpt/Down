@@ -66,6 +66,7 @@ struct cmark_node {
   void *user_data;
   cmark_free_func user_data_free_func;
 
+  int start_local;                      /**< 在文本中的起始位置 */
   int start_line;                       /**< 起始行 */
   int start_column;                     /**< 起始列（在行中的偏移） */
   int end_line;                         /**< 结束行 */
